@@ -9,7 +9,6 @@ QA: Qianyin Cao, Kunhang Luo
   * [Vision](#Vision)
   * [Mission](#Mission)
   * [Success criteria](#Success-criteria)
-
 * [Directory structure ](#Directory-structure)
 * [Running the app ](#Running-the-app)
   * [1. Initialize the database ](#1.-Initialize-the-database)
