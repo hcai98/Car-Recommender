@@ -1,14 +1,55 @@
-# MSiA423 Template Repository
+# MSiA423 Automobile Recommendation
 
-# Table of Contents
+Author: Haoyang (Bill) Cai
+
+QA: Qianyin Cao, Kunhang Luo
+
+## Table of Contents
+* [Project Charter ](#Project-charter)
+  * [Vision](#Vision)
+  * [Mission](#Mission)
+  * [Success criteria](#Success-criteria)
+
 * [Directory structure ](#Directory-structure)
 * [Running the app ](#Running-the-app)
-	* [1. Initialize the database ](#1.-Initialize-the-database)
-	* [2. Configure Flask app ](#2.-Configure-Flask-app)
-	* [3. Run the Flask app ](#3.-Run-the-Flask-app)
+  * [1. Initialize the database ](#1.-Initialize-the-database)
+  * [2. Configure Flask app ](#2.-Configure-Flask-app)
+  * [3. Run the Flask app ](#3.-Run-the-Flask-app)
 * [Testing](#Testing)
 * [Mypy](#Mypy)
 * [Pylint](#Pylint)
+
+## Project charter
+
+### Vision
+
+```
+The “why” of the project. The reason for the project’s existence. What the problem is you’re trying to solve, not how you’re solving it.
+```
+
+Is the car you think you like ACTUALLY the only car you like? In a seller's market, where automobile prices
+
+###  Mission
+
+- Link to dataset: https://deepvisualmarketing.github.io/
+
+```
+The “what” of the project. What will be built to achieve the vision? What does your model do? The mission should **not** include the tasks that you will be doing during development. 
+
+**Be sure to include the data source you intend to use**, including a link to the relevant site. Please note that you may **not** scrape websites if it is against their terms of service.
+```
+
+
+###  Success criteria
+
+```
+How will your business stakeholders (Fausto and Chloe) know the project was successful. What metric will you use to evaluate the performance of your model? What is the minimum value of that metric required for success?
+
+You should include two success criteria:
+
+1. The machine learning performance metric (e.g. accuracy, MSE, AUC, etc) that you will assess the model’s performance prior to deployment - what criteria is there for this metric that should be met before it can go live? (this can be negotiated later on).
+2. The metric that would actually measure the business outcome desired. This could be something like revenue, measures of user engagement, etc. Your app is sadly unlikely to be live long enough to measure this metric (though we would love if you kept it running forever!), but if it were, this what the true model performance and success would be based on.
+```
 
 
 
@@ -190,7 +231,7 @@ The following command will be executed within the container to run the provided 
 
 ```bash
 python -m pytest
-``` 
+```
 
 ## Mypy
 
