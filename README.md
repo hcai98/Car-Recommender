@@ -30,7 +30,7 @@ Due to the ongoing semiconductor shortage, the post-pandemic automotive market c
 
 Users will first specify the *make* and *model* of their dream car. The app will then *sequentially output* cars similar to the given input based on an unsupervised clustering algorithm (users must click "interested" or "not interested" to go to the next recommendation). The recommender is built using a publicly available dataset called [DVM-CAR](https://deepvisualmarketing.github.io/).
 
-**Example:** A user who has initially been looking for a BMW 3-Series is looking for other options in the market. Based characteristics of the given car, the app would first output the most similar car (say Audi A4) along with its specs and images. The user would then click "interested" or "not interested" to go to the next recommendated car. The process is repeated until the whole recommendation list is exhausted.
+**Example:** A user who has initially been looking for a BMW 3-Series is looking for other options in the market. Based characteristics of the given car, the app would first output the most similar car (say Audi A4) along with its specs and images. The user would then click "interested" or "not interested" to go to the next recommended car. The process is repeated until the whole recommendation list is exhausted.
 
 Based on the recommendations, users would be able to narrow down their search and utilize time more efficiently.
 
