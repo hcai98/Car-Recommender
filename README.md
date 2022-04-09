@@ -22,7 +22,7 @@ QA: Qianyin Cao, Kunhang Luo
 
 ### Vision
 
-Due to the ongoing semiconductor shortage, the post-pandemic automotive market suffers from supply shortages. With car prices stuck in high gear, many buyers can no longer afford their dream cars with the pre-pandemic budget and must turn to other options. However, this raises a simple yet hard-to-answer question in many buyers' minds: What Then?
+Due to the ongoing semiconductor shortage, the post-pandemic automotive market continues to suffer from supply shortages. With car prices stuck in high gear, many buyers can no longer afford their dream cars with the pre-pandemic budget and must turn to other options. However, this raises a simple yet hard-to-answer question in many buyers' minds: What Then?
 
 `ALT` (short for "alternative") aims to help potential buyers efficiently find alternative options by recommending cars similar to the dream car they've always wanted yet could no longer get in today's market. Countless hours and days that buyers would have wasted on browsing, researching, and test driving cars that don't match their expectation could now be saved using this recommender app.
 
