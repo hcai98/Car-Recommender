@@ -1,4 +1,4 @@
-# MSiA423 Automobile Recommendation
+# MSiA423 ALT - An Automobile Recommender
 
 Author: Haoyang (Bill) Cai
 
@@ -24,31 +24,25 @@ QA: Qianyin Cao, Kunhang Luo
 
 Due to the ongoing semiconductor shortage, the post-pandemic automotive market suffers from supply shortages. With car prices stuck in high gear, many buyers can no longer afford their dream cars with the pre-pandemic budget and must turn to other options. However, this raises a simple yet hard-to-answer question in many buyers' minds: What Then?
 
-The app aims to help potential buyers efficiently find alternative options by recommending cars similar to the DREAM CAR they've always had in mind. Countless hours and days that the buyer would have wasted on browsing, researching, and test driving cars that wouldn't match their expectation in the first place could now be saved using our recommender app.
+`ALT` (short for "alternative") aims to help potential buyers efficiently find alternative options by recommending cars similar to the dream car they've always wanted yet could no longer get in today's market. Countless hours and days that buyers would have wasted on browsing, researching, and test driving cars that don't match their expectation could now be saved using this recommender app.
 
 ###  Mission
 
-- Link to dataset: https://deepvisualmarketing.github.io/
+Users will first specify the *make* and *model* of their dream car. The app will then *sequentially output cars*  similar to the given input based on an unsupervised clustering algorithm ((users must click "interested" or "not interested" to go to next recommendation). The recommender is faciliated by a publicly available dataset called [DVM-CAR](https://deepvisualmarketing.github.io/).
 
-```
-The “what” of the project. What will be built to achieve the vision? What does your model do? The mission should **not** include the tasks that you will be doing during development. 
+Example: A user who was originally looking for a BMW 3-Series is looking for other options in the market. Based characteristics of the given car, the app would first output the most similar car (say Audi A4) along with its specs and images. The user would then click "interested" or "not interested" to go to the next recommendation car. The process is repeated until the whole recommendation list is exhausted.
 
-**Be sure to include the data source you intend to use**, including a link to the relevant site. Please note that you may **not** scrape websites if it is against their terms of service.
-```
-
+Based on the recommendations, the user would be able to narrow down the search and utilize time more efficiently.
 
 ###  Success criteria
 
-```
-How will your business stakeholders (Fausto and Chloe) know the project was successful. What metric will you use to evaluate the performance of your model? What is the minimum value of that metric required for success?
+#### Machine Learning Metrics
 
-You should include two success criteria:
+The ideal clustering algorithm/architecture will be picked using evaluation metrics such as Pseudo F and Silhouette Statistics. To be deployed, the best model should achieve an R-Squared greater than or equal to 0.75. 
 
-1. The machine learning performance metric (e.g. accuracy, MSE, AUC, etc) that you will assess the model’s performance prior to deployment - what criteria is there for this metric that should be met before it can go live? (this can be negotiated later on).
-2. The metric that would actually measure the business outcome desired. This could be something like revenue, measures of user engagement, etc. Your app is sadly unlikely to be live long enough to measure this metric (though we would love if you kept it running forever!), but if it were, this what the true model performance and success would be based on.
-```
+#### Business Metrics
 
-
+The app is designed so that user must click "interested" or "not interested" to go to the next car. We can use the user's selections to compute the **satisfaction rate** (number of likes / number of recommendations). This could be the success metrics.
 
 ## Directory structure 
 
