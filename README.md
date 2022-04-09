@@ -28,21 +28,21 @@ Due to the ongoing semiconductor shortage, the post-pandemic automotive market s
 
 ###  Mission
 
-Users will first specify the *make* and *model* of their dream car. The app will then *sequentially output cars*  similar to the given input based on an unsupervised clustering algorithm ((users must click "interested" or "not interested" to go to next recommendation). The recommender is faciliated by a publicly available dataset called [DVM-CAR](https://deepvisualmarketing.github.io/).
+Users will first specify the *make* and *model* of their dream car. The app will then *sequentially output cars* similar to the given input based on an unsupervised clustering algorithm ((users must click "interested" or "not interested" to go to the next recommendation). The recommender is facilitated by a publicly available dataset called [DVM-CAR](https://deepvisualmarketing.github.io/).
 
-Example: A user who was originally looking for a BMW 3-Series is looking for other options in the market. Based characteristics of the given car, the app would first output the most similar car (say Audi A4) along with its specs and images. The user would then click "interested" or "not interested" to go to the next recommendation car. The process is repeated until the whole recommendation list is exhausted.
+**Example:** A user who has initially been looking for a BMW 3-Series is looking for other options in the market. Based characteristics of the given car, the app would first output the most similar car (say Audi A4) along with its specs and images. The user would then click "interested" or "not interested" to go to the next recommendation car. The process is repeated until the whole recommendation list is exhausted.
 
-Based on the recommendations, the user would be able to narrow down the search and utilize time more efficiently.
+Based on the recommendations, users would be able to narrow down their search and utilize time more efficiently.
 
 ###  Success criteria
 
 #### Machine Learning Metrics
 
-The ideal clustering algorithm/architecture will be picked using evaluation metrics such as Pseudo F and Silhouette Statistics. To be deployed, the best model should achieve an R-Squared greater than or equal to 0.75. 
+The ideal clustering algorithm/architecture will be picked using evaluation metrics such as Pseudo F and Silhouette Statistics. To be deployed, the best model should achieve an ***R-Squared*** greater than or equal to 0.75. 
 
 #### Business Metrics
 
-The app is designed so that user must click "interested" or "not interested" to go to the next car. We can use the user's selections to compute the **satisfaction rate** (number of likes / number of recommendations). This could be the success metrics.
+The app is designed so that user must click "interested" or "not interested" to view the next recommended car. We can use the user's selections to compute the Satisfaction Rate of our recommendations (number of likes / number of recommendations). To be deemed successful, the app should have ***Averaged Satisfaction Rate per User*** greater than 0.2. 
 
 ## Directory structure 
 
