@@ -1,16 +1,48 @@
-# MSiA423 Template Repository
+# MSiA423 ALT - An Automobile Recommender
 
-# Table of Contents
+Author: Haoyang (Bill) Cai
+
+QA: Qianyin Cao, Kunhang Luo
+
+## Table of Contents
+* [Project Charter ](#Project-charter)
+  * [Vision](#Vision)
+  * [Mission](#Mission)
+  * [Success criteria](#Success-criteria)
 * [Directory structure ](#Directory-structure)
 * [Running the app ](#Running-the-app)
-	* [1. Initialize the database ](#1.-Initialize-the-database)
-	* [2. Configure Flask app ](#2.-Configure-Flask-app)
-	* [3. Run the Flask app ](#3.-Run-the-Flask-app)
+  * [1. Initialize the database ](#1.-Initialize-the-database)
+  * [2. Configure Flask app ](#2.-Configure-Flask-app)
+  * [3. Run the Flask app ](#3.-Run-the-Flask-app)
 * [Testing](#Testing)
 * [Mypy](#Mypy)
 * [Pylint](#Pylint)
 
+## Project charter
 
+### Vision
+
+Due to the ongoing semiconductor shortage, the post-pandemic automotive market suffers from supply shortages. With car prices stuck in high gear, many buyers can no longer afford their dream cars with the pre-pandemic budget and must turn to other options. However, this raises a simple yet hard-to-answer question in many buyers' minds: What Then?
+
+`ALT` (short for "alternative") aims to help potential buyers efficiently find alternative options by recommending cars similar to the dream car they've always wanted yet could no longer get in today's market. Countless hours and days that buyers would have wasted on browsing, researching, and test driving cars that don't match their expectation could now be saved using this recommender app.
+
+###  Mission
+
+Users will first specify the *make* and *model* of their dream car. The app will then *sequentially output cars*  similar to the given input based on an unsupervised clustering algorithm ((users must click "interested" or "not interested" to go to next recommendation). The recommender is faciliated by a publicly available dataset called [DVM-CAR](https://deepvisualmarketing.github.io/).
+
+Example: A user who was originally looking for a BMW 3-Series is looking for other options in the market. Based characteristics of the given car, the app would first output the most similar car (say Audi A4) along with its specs and images. The user would then click "interested" or "not interested" to go to the next recommendation car. The process is repeated until the whole recommendation list is exhausted.
+
+Based on the recommendations, the user would be able to narrow down the search and utilize time more efficiently.
+
+###  Success criteria
+
+#### Machine Learning Metrics
+
+The ideal clustering algorithm/architecture will be picked using evaluation metrics such as Pseudo F and Silhouette Statistics. To be deployed, the best model should achieve an R-Squared greater than or equal to 0.75. 
+
+#### Business Metrics
+
+The app is designed so that user must click "interested" or "not interested" to go to the next car. We can use the user's selections to compute the **satisfaction rate** (number of likes / number of recommendations). This could be the success metrics.
 
 ## Directory structure 
 
@@ -190,7 +222,7 @@ The following command will be executed within the container to run the provided 
 
 ```bash
 python -m pytest
-``` 
+```
 
 ## Mypy
 
