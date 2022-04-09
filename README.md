@@ -22,11 +22,9 @@ QA: Qianyin Cao, Kunhang Luo
 
 ### Vision
 
-```
-The “why” of the project. The reason for the project’s existence. What the problem is you’re trying to solve, not how you’re solving it.
-```
+Due to the ongoing semiconductor shortage, the post-pandemic automotive market suffers from supply shortages. With car prices stuck in high gear, many buyers can no longer afford their dream cars with the pre-pandemic budget and must turn to other options. However, this raises a simple yet hard-to-answer question in many buyers' minds: What Then?
 
-Is the car you think you like ACTUALLY the only car you like? In a seller's market, where automobile prices
+The app aims to help potential buyers efficiently find alternative options by recommending cars similar to the DREAM CAR they've always had in mind. Countless hours and days that the buyer would have wasted on browsing, researching, and test driving cars that wouldn't match their expectation in the first place could now be saved using our recommender app.
 
 ###  Mission
 
