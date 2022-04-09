@@ -38,11 +38,11 @@ Based on the recommendations, users would be able to narrow down their search an
 
 #### Machine Learning Metrics
 
-The ideal clustering algorithm/architecture will be picked using evaluation metrics such as Pseudo F and Silhouette Statistics. To be deployed, the best model should achieve an **R-Squared** greater than or equal to 0.75. 
+The ideal clustering algorithm/architecture will be picked using evaluation metrics such as Pseudo F and Silhouette Statistics. To be deployed, the best model should achieve an ***R-Squared*** greater than or equal to 0.75. 
 
 #### Business Metrics
 
-The app is designed so that user must click "interested" or "not interested" to view the next recommended car. We can use the user's selections to compute the Satisfaction Rate of our recommendations (number of likes / number of recommendations). To be deemed successful, the app should have **Averaged Satisfaction Rate per User** greater than 0.2. 
+The app is designed so that user must click "interested" or "not interested" to view the next recommended car. We can use the user's selections to compute the Satisfaction Rate of our recommendations (number of likes / number of recommendations). To be deemed successful, the app should have ***Averaged Satisfaction Rate per User*** greater than 0.2. 
 
 ## Directory structure 
 
