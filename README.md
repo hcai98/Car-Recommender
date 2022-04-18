@@ -2,8 +2,6 @@
 
 Author: Haoyang (Bill) Cai
 
-QA: Qianyin Cao, Kunhang Luo
-
 ## Table of Contents
 * [Project Charter ](#Project-charter)
   * [Vision](#Vision)
