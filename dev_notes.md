@@ -22,3 +22,9 @@ python upload_data.py \
     --s3path=s3://2022-msia423-cai-haoyang/raw/ \
     --local_path data/raw/    
 ```
+
+### Create table 
+```bash
+python create_database.py create_db  \
+    --engine_string mysql+pymysql://$MYSQL_USER:$MYSQL_PASSWORD@$MYSQL_HOST:$MYSQL_PORT/$DATABASE_NAME
+```
