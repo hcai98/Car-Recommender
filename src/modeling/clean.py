@@ -9,12 +9,33 @@ from src import utils_io
 
 logger = logging.getLogger(__name__)
 
+
 def clean(df: pd.DataFrame,
           transformation: dict,
           aggregation: dict,
           rename_map: dict,
           new_index: str) -> pd.DataFrame:
+    """Clean the original data for modeling use. User can specify
+    the transformation, aggregation and renaming strategies and 
+    inform the function using the dictionaries. 
 
+
+    Args:
+        df (pd.DataFrame): Raw data.
+        transformation (dict): Transformations strategy. The keys are 
+            the types of transformation. The values are lists of columns 
+            to be transformed.
+        aggregation (dict): Aggregation strategy. The keys are `key_cols`
+            (key columns), `key_path` (path the save the keys for later use), 
+            and `agg_cols_transforms` (a dictionary specifying how to summarize
+            different columns).
+        rename_map (dict): Keys are the columns to be renamed. Values are the new 
+            names.
+        new_index (str): Name of the new index.
+
+    Returns:
+        pd.DataFrame: _description_
+    """
     logger.info('Start Cleaning...')
     logger.debug('Raw data dimension %s', df.shape)
 
@@ -45,22 +66,22 @@ def transform_vars(df: pd.DataFrame,
     Returns:
         pd.DataFrame: Data with transformed columns.
     """
-    logger.info("Transforming variables...")
+    logger.info('Transforming variables...')
 
     # strip the numerical engine size from string
-    logger.debug("Stripping numerical data from string.")
+    logger.debug('Stripping numerical data from string.')
     for var_strip_numeric in transformation['vars_strip_numeric']:
         df[var_strip_numeric] = (df[var_strip_numeric]
                                  .str.replace('[^\d.]', '').astype(float))
 
     # drop rows that doesn't have numeric value
-    logger.debug("Dropping row that doesn't have numerical value.")
+    logger.debug('Dropping row that does not have numerical value.')
     for var_drop_non_numeric_rows in transformation['vars_drop_non_numeric_rows']:
         df = df[df[var_drop_non_numeric_rows].astype(str).str.isnumeric()]
         df[var_drop_non_numeric_rows] = df[var_drop_non_numeric_rows].astype(
             int)
 
-    logger.info("Transformation completed.")
+    logger.info('Transformation completed.')
     return df
 
 
@@ -78,7 +99,7 @@ def aggregate_by_keys(df: pd.DataFrame,
     Returns:
         pd.DataFrame: Aggregated data.
     """
-    logger.info("Aggregating data by specified keys.")
+    logger.info('Aggregating data by specified keys.')
 
     # map transform methods to transform functions
     agg_cols_transforms_funcs = {k: method_to_func(
@@ -98,7 +119,7 @@ def aggregate_by_keys(df: pd.DataFrame,
     utils_io.write_pandas_to_csv(pd.Series(aggregation['key_cols']),
                                  aggregation['key_path'])
 
-    logger.info("Aggregation completed.")
+    logger.info('Aggregation completed.')
 
     return df_output
 
