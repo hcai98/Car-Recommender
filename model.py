@@ -52,14 +52,9 @@ if __name__ == '__main__':
         # Extract cloud data from raw data file based on
         # the user's specification.
         df_output = clean.clean(df=df_input, **config['clean'])
-    # elif args.step == 'featurize':
-    #     # Create new features based on user specification. User
-    #     # can specify the transformations they want in the
-    #     # config/local/config.yml under the 'featurize/transformation' tag.
-    #     # We allow one type of transformation to be done multiple times.
-    #     # User just have to add more to the list under the type of transformation
-    #     # they want to perform and specify the target columns and feature names.
-    #     df_output = featurize.featurize(df_input, **config['featurize'])
+    elif args.step == 'featurize':
+        # Create new features based on user specification.
+        df_output = featurize.featurize(data=df_input, **config['featurize'])
     # elif args.step == 'train':
     #     # Train model using features generated. Trained model, as well as
     #     # the training and testing data will be saved to local directory.
