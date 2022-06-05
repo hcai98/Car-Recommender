@@ -8,7 +8,7 @@ from src.utils import io
 logger = logging.getLogger(__name__)
 
 
-def clean(df: pd.DataFrame,
+def clean(data: pd.DataFrame,
           transformation: dict,
           aggregation: dict,
           rename_map: dict,
@@ -19,7 +19,7 @@ def clean(df: pd.DataFrame,
 
 
     Args:
-        df (pd.DataFrame): Raw data.
+        data (pd.DataFrame): Raw data.
         transformation (dict): Transformations strategy. The keys are 
             the types of transformation. The values are lists of columns 
             to be transformed.
@@ -35,33 +35,33 @@ def clean(df: pd.DataFrame,
         pd.DataFrame: _description_
     """
     logger.info('Start Cleaning...')
-    logger.debug('Raw data dimension %s', df.shape)
+    logger.debug('Raw data dimension %s', data.shape)
 
     # reformat column names
-    df.columns = [col.strip().lower() for col in df.columns]
+    data.columns = [col.strip().lower() for col in data.columns]
 
     # rename original columns
-    df = df.rename(columns=rename_map)
+    data = data.rename(columns=rename_map)
 
     # perform transformation of specified variables
-    df = transform_vars(df, transformation)
+    data = transform_vars(data, transformation)
 
     # drop na's
-    df = df.dropna()
+    data = data.dropna()
 
     # aggregate raw data by keys
-    df_output = aggregate_by_keys(df, aggregation, new_index)
+    df_output = aggregate_by_keys(data, aggregation, new_index)
 
     logger.info('Finish Cleaning.')
     return df_output
 
 
-def transform_vars(df: pd.DataFrame,
+def transform_vars(data: pd.DataFrame,
                    transformation: dict) -> pd.DataFrame:
     """Transform variables based on user's specification
 
     Args:
-        df (pd.DataFrame): Raw data.
+        data (pd.DataFrame): Raw data.
         transformation (dict): User specified transformations (in config.yml).
 
     Returns:
@@ -72,28 +72,28 @@ def transform_vars(df: pd.DataFrame,
     # strip the numerical engine size from string
     logger.debug('Stripping numerical data from string.')
     for var_strip_numeric in transformation['vars_strip_numeric']:
-        df[var_strip_numeric] = (df[var_strip_numeric]
+        data[var_strip_numeric] = (data[var_strip_numeric]
                                  .str.replace('[^\d.]', '').astype(float))
 
     # drop rows that doesn't have numeric value
     logger.debug('Dropping row that does not have numerical value.')
     for var_drop_non_numeric_rows in transformation['vars_drop_non_numeric_rows']:
-        df = df[df[var_drop_non_numeric_rows].astype(str).str.isnumeric()]
-        df[var_drop_non_numeric_rows] = df[var_drop_non_numeric_rows].astype(
+        data = data[data[var_drop_non_numeric_rows].astype(str).str.isnumeric()]
+        data[var_drop_non_numeric_rows] = data[var_drop_non_numeric_rows].astype(
             int)
 
     logger.info('Transformation completed.')
-    return df
+    return data
 
 
-def aggregate_by_keys(df: pd.DataFrame,
+def aggregate_by_keys(data: pd.DataFrame,
                       aggregation: dict,
                       new_index: str) -> pd.DataFrame:
     """Aggregating the data by key columns and specified summary
     methods. 
 
     Args:
-        df (pd.DataFrame): Raw data.
+        data (pd.DataFrame): Raw data.
         aggregation (dict): A dictionary specifying how each column will be transformed.
         new_index (str): Name of the index of the aggregated data.
 
@@ -108,7 +108,7 @@ def aggregate_by_keys(df: pd.DataFrame,
 
     # aggregate raw data by keys
     df_output = (
-        df
+        data
         .groupby(aggregation['key_cols'])
         .agg(agg_cols_transforms_funcs)
         .reset_index()

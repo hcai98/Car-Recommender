@@ -34,6 +34,9 @@ def featurize(data: pd.DataFrame,
     if is_get_dummies:
         logger.info("Getting dummies...")
         feature = pd.get_dummies(data[feature_cols]).astype(float)
+        # make all column names lower case
+        feature.columns = [col.lower() for col in feature.columns]
+
 
     # standardize the variables
     if is_standardize:

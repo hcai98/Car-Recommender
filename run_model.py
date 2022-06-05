@@ -49,7 +49,7 @@ if __name__ == '__main__':
         # acquire.acquire(**config['acquire'], output_dir=args.output)
     elif args.step == 'clean':
         # Extract cloud data from raw data file based on the user's specification.
-        df_output = clean.clean(df=df_input, **config['clean'])
+        df_output = clean.clean(data=df_input, **config['clean'])
     elif args.step == 'featurize':
         # Create new features based on user specification.
         df_output = featurize.featurize(data=df_input, **config['featurize'])
