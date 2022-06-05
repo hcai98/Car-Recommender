@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link href="static/basic.css" rel="stylesheet" />
+  </head>
+
+  <body>
+    <h3>
+      ERROR
+    </h3>
+
+    <div class="alert alert-danger" role="alert">
+      <p class="alert-link">You must complete all fields in the form to get recommendation.</p>
+      <p>Error message: {{error_message}}</p>
+    </div>
+
+    <div>
+      <a href="{{ url_for('index') }}">Go Back</a>
+    </div>
+  </body>
+</html>
