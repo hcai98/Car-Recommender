@@ -37,6 +37,9 @@ def clean(df: pd.DataFrame,
     logger.info('Start Cleaning...')
     logger.debug('Raw data dimension %s', df.shape)
 
+    # reformat column names
+    df.columns = [col.strip().lower() for col in df.columns]
+
     # rename original columns
     df = df.rename(columns=rename_map)
 
