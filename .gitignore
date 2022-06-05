@@ -9,8 +9,11 @@ __pycache__/
 
 
 data/*
+!data/processed/
+data/processed/*
+!data/evaluation/
+data/evaluation/*
 !data/sample/
 !data/external/
-!data/processed/.gitkeep
 config/local/*
 !.gitkeep
