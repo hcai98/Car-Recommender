@@ -27,7 +27,7 @@ if __name__ == '__main__':
                         help='Path to configuration file')
     parser.add_argument('--output', '-o', default=None,
                         help='Path to save output CSV (optional, default = None)')
-    parser.add_argument('--model_path', default=None,
+    parser.add_argument('--model_save_path', default=None,
                         help='Path where the trained model is saved (optional, default = None)')
     args = parser.parse_args()
 
@@ -39,7 +39,7 @@ if __name__ == '__main__':
     logger.info('Configuration file loaded from %s', args.config)   
 
     # input data
-    if args.input is not None:
+    if (args.input is not None) and (args.step != 'label'):
         df_input = utils_io.read_pandas(args.input)
         logger.info('Input data loaded from %s', args.input)
 
@@ -58,11 +58,10 @@ if __name__ == '__main__':
         # will be saved to local directory.
         train.train(feature=df_input, model_save_path=args.output, **config['train'])
     elif args.step == 'label':
-        pass
-    #     # make prediction on new data using the saved model. User shousld specify
-    #     # new data's path and the model's path in command line. Predictions will
-    #     # also be saved. The output location is set in the config.yml file.
-    #     predict.predict(predictors=df_input, model_path=args.model_path, **config['predict'])
+        # Use the clustering model to label all cars into different classes. 
+        # User should also specify the path the clean data and features data 
+        # in the config file.
+        df_output = label.label(model_save_path=args.input, **config['label'])
     # elif args.step == 'evaluate':
     #     # User should specify pyath to ground truth and prediction in config file
     #     evaluate.evaluate(args.output, **config['evaluate'])
