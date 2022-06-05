@@ -30,12 +30,21 @@ python run_model.py label --input models/kmeans_50 --config config/config_modeli
 ## Database
 ### Create Database
 
+Local
+```shell
+python run_db.py create_db  \
+    --engine_string 'sqlite:///data/cars.db'
+```
+
+RDS
 ```shell
 python run_db.py create_db  \
     --engine_string mysql+pymysql://$MYSQL_USER:$MYSQL_PASSWORD@$MYSQL_HOST:$MYSQL_PORT/$DATABASE_NAME
 ```
 
+### Ingestiong
+
+Local
 ```shell
-python run_db.py create_db  \
-    --engine_string mysql+pymysql://$MYSQL_USER:$MYSQL_PASSWORD@$MYSQL_HOST:$MYSQL_PORT/$DATABASE_NAME
+python run_db.py ingest --input data/processed/labels.csv --engine_string 'sqlite:///data/cars.db'      
 ```
