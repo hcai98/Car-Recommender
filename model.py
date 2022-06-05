@@ -62,7 +62,8 @@ if __name__ == '__main__':
         # User should also specify the path the clean data and features data 
         # in the config file.
         df_output = label.label(model_save_path=args.input, **config['label'])
-    # elif args.step == 'evaluate':
+    elif args.step == 'evaluate':
+        pass
     #     # User should specify pyath to ground truth and prediction in config file
     #     evaluate.evaluate(args.output, **config['evaluate'])
 
