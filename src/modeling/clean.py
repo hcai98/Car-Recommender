@@ -73,12 +73,13 @@ def transform_vars(data: pd.DataFrame,
     logger.debug('Stripping numerical data from string.')
     for var_strip_numeric in transformation['vars_strip_numeric']:
         data[var_strip_numeric] = (data[var_strip_numeric]
-                                 .str.replace('[^\d.]', '').astype(float))
+                                   .str.replace('[^\d.]', '').astype(float))
 
     # drop rows that doesn't have numeric value
     logger.debug('Dropping row that does not have numerical value.')
     for var_drop_non_numeric_rows in transformation['vars_drop_non_numeric_rows']:
-        data = data[data[var_drop_non_numeric_rows].astype(str).str.isnumeric()]
+        data = data[data[var_drop_non_numeric_rows].astype(
+            str).str.isnumeric()]
         data[var_drop_non_numeric_rows] = data[var_drop_non_numeric_rows].astype(
             int)
 
@@ -118,7 +119,7 @@ def aggregate_by_keys(data: pd.DataFrame,
 
     # archive key_columns
     io.write_pandas_to_csv(pd.Series(aggregation['key_cols']),
-                                 aggregation['key_path'])
+                           aggregation['key_path'])
 
     logger.info('Aggregation completed.')
 
