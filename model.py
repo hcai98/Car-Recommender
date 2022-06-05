@@ -5,7 +5,7 @@ import pandas as pd
 import yaml
 
 from config import modelconfig
-from src.modeling import acquire, clean, featurize
+from src.modeling import acquire, clean, featurize, train, label
 from src import utils_io
 
 # configure logger
@@ -20,7 +20,7 @@ if __name__ == '__main__':
         description='Acquire, clean, create features, and generate clusters from car data')
 
     parser.add_argument('step', help='Which step to run',
-                        choices=['acquire', 'clean', 'featurize', 'train', 'predict', 'evaluate'])
+                        choices=['acquire', 'clean', 'featurize', 'train', 'label', 'evaluate'])
     parser.add_argument('--input', '-i', default=None,
                         help='Path to input data')
     parser.add_argument('--config', default='config/local/config_modeling.yml',
@@ -35,9 +35,8 @@ if __name__ == '__main__':
     logger.info("Current Step: %s", args.step)
 
     # Load configuration file for parameters and tmo path
-    with open(args.config, 'r', encoding='utf-8') as f:
-        config = yaml.load(f, Loader=yaml.FullLoader)
-    logger.info('Configuration file loaded from %s', args.config)
+    config = utils_io.read_yml(path=args.config)
+    logger.info('Configuration file loaded from %s', args.config)   
 
     # input data
     if args.input is not None:
@@ -49,17 +48,17 @@ if __name__ == '__main__':
         pass
         # acquire.acquire(**config['acquire'], output_dir=args.output)
     elif args.step == 'clean':
-        # Extract cloud data from raw data file based on
-        # the user's specification.
+        # Extract cloud data from raw data file based on the user's specification.
         df_output = clean.clean(df=df_input, **config['clean'])
     elif args.step == 'featurize':
         # Create new features based on user specification.
         df_output = featurize.featurize(data=df_input, **config['featurize'])
-    # elif args.step == 'train':
-    #     # Train model using features generated. Trained model, as well as
-    #     # the training and testing data will be saved to local directory.
-    #     train.train(df_input, args.output, **config['train'])
-    # elif args.step == 'predict':
+    elif args.step == 'train':
+        # Train model using features generated. Trained model
+        # will be saved to local directory.
+        train.train(feature=df_input, model_save_path=args.output, **config['train'])
+    elif args.step == 'label':
+        pass
     #     # make prediction on new data using the saved model. User shousld specify
     #     # new data's path and the model's path in command line. Predictions will
     #     # also be saved. The output location is set in the config.yml file.
