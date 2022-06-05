@@ -6,7 +6,7 @@ import yaml
 
 from config import modelconfig
 from src.modeling import acquire, clean, featurize, train, label
-from src import utils_io
+from src.utils import io
 
 # configure logger
 logging.config.fileConfig(modelconfig.LOGGING_CONFIG)
@@ -35,12 +35,12 @@ if __name__ == '__main__':
     logger.info("Current Step: %s", args.step)
 
     # Load configuration file for parameters and tmo path
-    config = utils_io.read_yml(path=args.config)
+    config = io.read_yml(path=args.config)
     logger.info('Configuration file loaded from %s', args.config)   
 
     # input data
     if (args.input is not None) and (args.step != 'label'):
-        df_input = utils_io.read_pandas(args.input)
+        df_input = io.read_pandas(args.input)
         logger.info('Input data loaded from %s', args.input)
 
     # perform modeling steps
@@ -71,4 +71,4 @@ if __name__ == '__main__':
     # however, if step is "acquire" or "train", we don't save data here
     # as it is handled within the acquire.acquire function.
     if (args.output is not None) and (args.step not in ('acquire', 'train', 'evaluate')):
-        utils_io.write_pandas_to_csv(df_output, args.output)
+        io.write_pandas_to_csv(df_output, args.output)

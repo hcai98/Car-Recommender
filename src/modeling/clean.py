@@ -3,7 +3,7 @@ from typing import Union, Callable
 
 import pandas as pd
 
-from src import utils_io
+from src.utils import io
 
 logger = logging.getLogger(__name__)
 
@@ -114,7 +114,7 @@ def aggregate_by_keys(df: pd.DataFrame,
     )
 
     # archive key_columns
-    utils_io.write_pandas_to_csv(pd.Series(aggregation['key_cols']),
+    io.write_pandas_to_csv(pd.Series(aggregation['key_cols']),
                                  aggregation['key_path'])
 
     logger.info('Aggregation completed.')

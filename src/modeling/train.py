@@ -3,7 +3,7 @@ import logging
 import pandas as pd
 from sklearn.cluster import KMeans
 
-from src import utils_io
+from src.utils import io
 
 logger = logging.getLogger(__name__)
 
@@ -26,4 +26,4 @@ def train(feature: pd.DataFrame,
     logger.info('Model fitted.')
 
     # save model to local directory
-    utils_io.save_model(model, model_save_path)
+    io.save_model(model, model_save_path)

@@ -2,7 +2,7 @@ import logging
 
 import pandas as pd
 
-from src import utils_io
+from src.utils import io
 
 logger = logging.getLogger(__name__)
 
@@ -24,11 +24,11 @@ def label(model_save_path: str,
         pd.DataFrame: Clean data with the assignment column appended.
     """
     # load model from path
-    model = utils_io.load_model(model_save_path)
+    model = io.load_model(model_save_path)
     logger.info('Model loaded.')
 
     # load feature
-    feature = utils_io.read_pandas(feature_path)
+    feature = io.read_pandas(feature_path)
     logger.info('Features loaded.')
 
     # label: get cluster assignment
@@ -36,7 +36,7 @@ def label(model_save_path: str,
     logger.info('Cluster assigned.')
 
     # load clean data
-    data = utils_io.read_pandas(clean_data_path)
+    data = io.read_pandas(clean_data_path)
     logger.info('Clean data loaded.')
 
     # append cluster assignment to every car
