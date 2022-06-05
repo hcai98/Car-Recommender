@@ -1,0 +1,42 @@
+clean:
+  transformation:
+    vars_strip_numeric: 
+      - engin_size
+    vars_drop_non_numeric_rows: 
+      - price
+  aggregation:
+    key_cols:
+      - maker
+      - genmodel
+      - year
+      - bodytype
+    key_path: data/processed/keys.csv
+    agg_cols_transforms:
+      genmodel_id: 'first'
+      engin_size: 'first'
+      gearbox: 'mode'
+      fuel_type: 'first'
+      price: 'mean'
+      seat_num: 'mode'
+      door_num: 'mode'
+  rename_map:
+    adv_year: 'year'
+  new_index: 'car_id'
+featurize:
+  feature_cols:
+    - 'engin_size'
+    - 'gearbox'
+    - 'seat_num'
+    - 'door_num'
+  is_get_dummies: true
+  is_standardize: true
+train: 
+  model_config:
+    n_clusters: 50
+    random_state: 0
+label:
+  feature_path: data/processed/feature.csv
+  clean_data_path: data/processed/clean_cars.csv
+  col_cluster: class
+evaluate:
+  metrics: TBD
