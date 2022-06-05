@@ -37,6 +37,6 @@ train:
 label:
   feature_path: data/processed/feature.csv
   clean_data_path: data/processed/clean_cars.csv
-  col_cluster: class
+  col_cluster: cluster
 evaluate:
   metrics: TBD
