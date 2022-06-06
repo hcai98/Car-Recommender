@@ -1,7 +1,6 @@
 """Creates, ingests data into, and enables querying of a table of
  songs for the PennyLane app to query from and display results to the user."""
 # mypy: plugins = sqlmypy, plugins = flasksqlamypy
-import argparse
 import logging.config
 import sqlite3
 import typing

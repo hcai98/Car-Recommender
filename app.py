@@ -1,16 +1,18 @@
+import json
 import logging.config
 import sqlite3
 import traceback
 
 import sqlalchemy.exc
 from flask import Flask, jsonify, render_template, request, redirect, url_for
+from flask import session as flask_session
 from werkzeug.exceptions import BadRequestKeyError
 
 # For setting up the Flask-SQLAlchemy database session
 from src.database.create_db import Cars
 from src.database.add_cars import CarManager
 from src.flaskapp.flask_models import Form
-from src.flaskapp.recommend import validate_input
+from src.flaskapp.recommend import validate_input, get_recommendation
 
 # Initialize the Flask application
 app = Flask(__name__,
@@ -62,17 +64,21 @@ def index():
         # set maker choices in form
         form_user_input.maker.choices = [('', 'Enter Maker')] + maker_list
 
-        if request.method == 'POST':
-            cars = car_manager.session.query(Cars).filter(Cars.cluster == 42).limit(
-                app.config["MAX_ROWS_SHOW"]
-            ).all()
-            logger.debug("Index page accessed")
-            return '<h1>Hello</h1>'
+        # if request.method == 'POST':
+        #     cars = car_manager.session.query(Cars).filter(Cars.cluster == 42).limit(
+        #         app.config["MAX_ROWS_SHOW"]
+        #     ).all()
+        #     logger.debug("Index page accessed")
+        #     return '<h1>Hello</h1>'
+        logger.info("Rendering without cars.")
 
-        if request.method == 'GET':
-            # return render_template('index.html', cars=cars, form_user_input=form_user_input)
-            return render_template('index.html', form_user_input=form_user_input)
-
+        try:
+            return render_template('index.html',
+                                   form_user_input=form_user_input,
+                                   cars=request.args['cars'])
+        except:
+            return render_template('index.html',
+                                   form_user_input=form_user_input)
 
     except sqlite3.OperationalError as err_or:
         logger.error(
@@ -109,9 +115,19 @@ def get_recommendations():
 
         # validate if inputs are valid
         validate_input(maker, model, year, bodytype)
-        year = int(year) # convert year to int if valid
+        year = int(year)  # convert year to int if valid
 
-        # get cluster
+        input_specs = {'maker': maker, 'model': model,
+                       'year': year, 'bodytype': bodytype}
+
+        # get recommendations
+        car_recommendations, dream_car = get_recommendation(car_manager=car_manager,
+                                                            max_rows=app.config["MAX_ROWS_SHOW"],
+                                                            **input_specs)
+        logger.info('Recommendations list retrieved. %s', car_recommendations)
+        logger.info('Dream car retrieved. %s', dream_car)
+
+        return render_template('result.html', cars=car_recommendations, dream_car=dream_car)
 
     except (BadRequestKeyError, ValueError) as missing_input:
         logger.error("Some values are missing from the form."
@@ -153,7 +169,7 @@ def get_years(maker: str, model: str):
                  maker, model)
     years = [(year[0], year[0]) for year in (car_manager.session
                                              .query(Cars.year)
-                                             .filter(Cars.maker == maker and
+                                             .filter(Cars.maker == maker,
                                                      Cars.genmodel == model)
                                              .distinct()
                                              .all())]
@@ -179,8 +195,8 @@ def get_body_types(maker: str, model: str, year: str):
                  maker, model, year)
     bodytypes = [(bodytype[0], bodytype[0]) for bodytype in (car_manager.session
                                                              .query(Cars.bodytype)
-                                                             .filter(Cars.maker == maker and
-                                                                     Cars.genmodel == model and
+                                                             .filter(Cars.maker == maker,
+                                                                     Cars.genmodel == model,
                                                                      Cars.year == year)
                                                              .distinct()
                                                              .all())]

@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link href="static/basic.css" rel="stylesheet" />
+  </head>
+
+  <body>
+    <h2>Your dream car was: </h2>
+    <table>
+      <thead>
+        <tr>
+          <th>Maker</th>
+          <th>Model</th>
+          <th>Year</th>
+          <th>Body Type</th>
+          <th>Gearbox</th>
+          <th>Engine Size</th>
+          <th>Fuel Type</th>
+          <th>Seat Number</th>
+          <th>Door Number</th>
+          <th>Price Estimate</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        <tr>
+          <td>{{ dream_car.maker }}</td>
+          <td>{{ dream_car.genmodel }}</td>
+          <td>{{ dream_car.year }}</td>
+          <td>{{ dream_car.bodytype }}</td>
+          <td>{{ dream_car.gearbox }}</td>
+          <td>{{ dream_car.engin_size }}</td>
+          <td>{{ dream_car.fuel_type }}</td>
+          <td>{{ dream_car.seat_num }}</td>
+          <td>{{ dream_car.door_num }}</td>
+          <td>{{ dream_car.price }}</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h2>Here are some alternatives we have found for you: </h2>
+    <table>
+      <thead>
+        <tr>
+          <th>Maker</th>
+          <th>Model</th>
+          <th>Year</th>
+          <th>Body Type</th>
+          <th>Gearbox</th>
+          <th>Engine Size</th>
+          <th>Fuel Type</th>
+          <th>Seat Number</th>
+          <th>Door Number</th>
+          <th>Price Estimate</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        {% for car in cars %}
+        <tr>
+          <td>{{ car.maker }}</td>
+          <td>{{ car.genmodel }}</td>
+          <td>{{ car.year }}</td>
+          <td>{{ car.bodytype }}</td>
+          <td>{{ car.gearbox }}</td>
+          <td>{{ car.engin_size }}</td>
+          <td>{{ car.fuel_type }}</td>
+          <td>{{ car.seat_num }}</td>
+          <td>{{ car.door_num }}</td>
+          <td>{{ car.price }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+
+    <h3>
+      <a href="{{ url_for('index') }}">Go Back</a>
+    </h3>
+  </body>
+</html>

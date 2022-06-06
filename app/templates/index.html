@@ -25,44 +25,7 @@
     </form>
 
     <hr />
-
-    <!-- Recommendation Results -->
-    <h2>
-      <p>Recommendations:</p>
-    </h2>
-    <table>
-      <thead>
-        <tr>
-          <th>Maker</th>
-          <th>Model</th>
-          <th>Year</th>
-          <th>Body Type</th>
-          <th>Gearbox</th>
-          <th>Engine Size</th>
-          <th>Fuel Type</th>
-          <th>Seat Number</th>
-          <th>Door Number</th>
-          <th>Price Estimate</th>
-        </tr>
-      </thead>
-
-      <tbody>
-        {% for car in cars %}
-        <tr>
-          <td>{{ car.maker }}</td>
-          <td>{{ car.genmodel }}</td>
-          <td>{{ car.year }}</td>
-          <td>{{ car.bodytype }}</td>
-          <td>{{ car.gearbox }}</td>
-          <td>{{ car.engin_size }}</td>
-          <td>{{ car.fuel_type }}</td>
-          <td>{{ car.seat_num }}</td>
-          <td>{{ car.door_num }}</td>
-          <td>{{ car.price }}</td>
-        </tr>
-        {% endfor %}
-      </tbody>
-    </table>
+    
 
     <script>
       let maker_select = document.getElementById("maker");
@@ -80,7 +43,7 @@
 
             for (let model of data.models) {
               optionHTML +=
-                '<option value="' + model.id + '">' + model.name + '</option>';
+                '<option value="' + model.id + '">' + model.name + "</option>";
             }
 
             model_select.innerHTML = optionHTML;
@@ -121,7 +84,11 @@
 
             for (let bodytype of data.bodytypes) {
               optionHTML +=
-                '<option value="' + bodytype.id + '">' + bodytype.name + "</option>";
+                '<option value="' +
+                bodytype.id +
+                '">' +
+                bodytype.name +
+                "</option>";
             }
 
             body_select.innerHTML = optionHTML;
