@@ -10,5 +10,5 @@ MAX_ROWS_SHOW = 100
 SECRET_KEY = os.urandom(32)
 
 SQLALCHEMY_DATABASE_URI = os.environ.get('SQLALCHEMY_DATABASE_URI')
-if SQLALCHEMY_DATABASE_URI is None:
-    SQLALCHEMY_DATABASE_URI = 'sqlite:///data/cars.db'
+# if SQLALCHEMY_DATABASE_URI is None:
+#     SQLALCHEMY_DATABASE_URI = 'sqlite:///data/cars.db'
