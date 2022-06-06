@@ -9,7 +9,7 @@ TBD
 
 ### Clean Data
 ```shell
-python run_model.py clean --input data/raw/table/Ad_table.csv --config config/config_modeling.yml --output data/processed/clean_cars.csv
+python run_model.py clean --input data/raw/Ad_table.csv --config config/config_modeling.yml --output data/processed/clean_cars.csv
 ```
 
 ### Featurize
@@ -28,6 +28,18 @@ python run_model.py label --input models/kmeans_50 --config config/config_modeli
 ```
 
 ## Database
+
+### RDS From Command Line
+```shell
+docker run \
+  -it  \
+  --rm \
+  mysql:5.7.33 \
+  mysql \
+  -h${MYSQL_HOST}  \
+  -u${MYSQL_USER}  \
+  -p${MYSQL_PASSWORD} 
+```
 ### Create Database
 
 Local
@@ -42,9 +54,15 @@ python run_db.py create_db  \
     --engine_string mysql+pymysql://$MYSQL_USER:$MYSQL_PASSWORD@$MYSQL_HOST:$MYSQL_PORT/$DATABASE_NAME
 ```
 
-### Ingestiong
+### Ingestion
 
 Local
 ```shell
 python run_db.py ingest --input data/processed/labels.csv --engine_string 'sqlite:///data/cars.db'      
+```
+
+RDS
+```shell
+python run_db.py ingest --input data/processed/labels.csv \
+    --engine_string mysql+pymysql://$MYSQL_USER:$MYSQL_PASSWORD@$MYSQL_HOST:$MYSQL_PORT/$DATABASE_NAME     
 ```
