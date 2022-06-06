@@ -135,56 +135,94 @@ def get_recommendations():
                      " maker, model, year, and body type. "
                      "Message: %s", missing_input)
         return render_template('error_form.html', error_message=missing_input)
-
+    except sqlite3.OperationalError as err_or:
+        logger.error(
+            "Error page returned. Not able to query local sqlite database: %s."
+            " Error: %s ",
+            app.config['SQLALCHEMY_DATABASE_URI'], err_or)
+        return render_template('error.html')
+    except sqlalchemy.exc.OperationalError as err_or:
+        logger.error(
+            "Error page returned. Not able to query MySQL database: %s. "
+            "Error: %s ",
+            app.config['SQLALCHEMY_DATABASE_URI'], err_or)
+        return render_template('error.html')
 
 @app.route('/models/<maker>')
 def get_models(maker: str):
 
-    # retrieve all models built by the maker
-    logger.debug("Getting all models for maker %s", maker)
-    models = [(model[0], model[0]) for model in (car_manager.session
-                                                 .query(Cars.genmodel)
-                                                 .filter(Cars.maker == maker)
-                                                 .distinct()
-                                                 .all())]
-    logger.info('Get model list: %s', models)
+    try:
+        # retrieve all models built by the maker
+        logger.debug("Getting all models for maker %s", maker)
+        models = [(model[0], model[0]) for model in (car_manager.session
+                                                    .query(Cars.genmodel)
+                                                    .filter(Cars.maker == maker)
+                                                    .distinct()
+                                                    .all())]
+        logger.info('Get model list: %s', models)
 
-    # create model objects and save in a lists
-    model_array = []
-    for model in models:
-        modelObj = {}
-        modelObj['id'] = model[0]
-        modelObj['name'] = model[1]
-        model_array.append(modelObj)
+        # create model objects and save in a lists
+        model_array = []
+        for model in models:
+            modelObj = {}
+            modelObj['id'] = model[0]
+            modelObj['name'] = model[1]
+            model_array.append(modelObj)
 
-    # return json object with the model lists
-    return jsonify({'models': model_array})
+        # return json object with the model lists
+        return jsonify({'models': model_array})
 
+    except sqlite3.OperationalError as err_or:
+        logger.error(
+            "Error page returned. Not able to query local sqlite database: %s."
+            " Error: %s ",
+            app.config['SQLALCHEMY_DATABASE_URI'], err_or)
+        return render_template('error.html')
+    except sqlalchemy.exc.OperationalError as err_or:
+        logger.error(
+            "Error page returned. Not able to query MySQL database: %s. "
+            "Error: %s ",
+            app.config['SQLALCHEMY_DATABASE_URI'], err_or)
+        return render_template('error.html')
 
 @app.route('/years/<maker>/<model>')
 def get_years(maker: str, model: str):
 
-    # retrieve all years of this model
-    logger.debug("Getting all years for maker %s model %s",
-                 maker, model)
-    years = [(year[0], year[0]) for year in (car_manager.session
-                                             .query(Cars.year)
-                                             .filter(Cars.maker == maker,
-                                                     Cars.genmodel == model)
-                                             .distinct()
-                                             .all())]
-    logger.info('Get year list: %s', years)
+    try:
+        # retrieve all years of this model
+        logger.debug("Getting all years for maker %s model %s",
+                    maker, model)
+        years = [(year[0], year[0]) for year in (car_manager.session
+                                                .query(Cars.year)
+                                                .filter(Cars.maker == maker,
+                                                        Cars.genmodel == model)
+                                                .distinct()
+                                                .all())]
+        logger.info('Get year list: %s', years)
 
-    # create model objects and save in a lists
-    year_array = []
-    for year in years:
-        yearObj = {}
-        yearObj['id'] = year[0]
-        yearObj['name'] = year[1]
-        year_array.append(yearObj)
+        # create model objects and save in a lists
+        year_array = []
+        for year in years:
+            yearObj = {}
+            yearObj['id'] = year[0]
+            yearObj['name'] = year[1]
+            year_array.append(yearObj)
 
-    # return json object with the model lists
-    return jsonify({'years': year_array})
+        # return json object with the model lists
+        return jsonify({'years': year_array})
+
+    except sqlite3.OperationalError as err_or:
+        logger.error(
+            "Error page returned. Not able to query local sqlite database: %s."
+            " Error: %s ",
+            app.config['SQLALCHEMY_DATABASE_URI'], err_or)
+        return render_template('error.html')
+    except sqlalchemy.exc.OperationalError as err_or:
+        logger.error(
+            "Error page returned. Not able to query MySQL database: %s. "
+            "Error: %s ",
+            app.config['SQLALCHEMY_DATABASE_URI'], err_or)
+        return render_template('error.html')
 
 
 @app.route('/bodytypes/<maker>/<model>/<year>')
@@ -193,54 +231,41 @@ def get_body_types(maker: str, model: str, year: str):
     # retrieve all body types of this model
     logger.debug("Getting all body types for %s %s %s",
                  maker, model, year)
-    bodytypes = [(bodytype[0], bodytype[0]) for bodytype in (car_manager.session
-                                                             .query(Cars.bodytype)
-                                                             .filter(Cars.maker == maker,
-                                                                     Cars.genmodel == model,
-                                                                     Cars.year == year)
-                                                             .distinct()
-                                                             .all())]
-    logger.info('Get body type list: %s', bodytypes)
+    
+    try:
+        bodytypes = [(bodytype[0], bodytype[0]) for bodytype in (car_manager.session
+                                                                .query(Cars.bodytype)
+                                                                .filter(Cars.maker == maker,
+                                                                        Cars.genmodel == model,
+                                                                        Cars.year == year)
+                                                                .distinct()
+                                                                .all())]
+        logger.info('Get body type list: %s', bodytypes)
 
-    # create model objects and save in a lists
-    bodytype_array = []
-    for bodytype in bodytypes:
-        bodytypeObj = {}
-        bodytypeObj['id'] = bodytype[0]
-        bodytypeObj['name'] = bodytype[1]
-        bodytype_array.append(bodytypeObj)
+        # create model objects and save in a lists
+        bodytype_array = []
+        for bodytype in bodytypes:
+            bodytypeObj = {}
+            bodytypeObj['id'] = bodytype[0]
+            bodytypeObj['name'] = bodytype[1]
+            bodytype_array.append(bodytypeObj)
 
-    # return json object with the model lists
-    return jsonify({'bodytypes': bodytype_array})
+        # return json object with the model lists
+        return jsonify({'bodytypes': bodytype_array})
 
-# @app.route('/add', methods=['POST'])
-# def add_entry():
-#     """View that process a POST with new song input
+    except sqlite3.OperationalError as err_or:
+        logger.error(
+            "Error page returned. Not able to query local sqlite database: %s."
+            " Error: %s ",
+            app.config['SQLALCHEMY_DATABASE_URI'], err_or)
+        return render_template('error.html')
+    except sqlalchemy.exc.OperationalError as err_or:
+        logger.error(
+            "Error page returned. Not able to query MySQL database: %s. "
+            "Error: %s ",
+            app.config['SQLALCHEMY_DATABASE_URI'], err_or)
+        return render_template('error.html')
 
-#     Returns:
-#         redirect to index page
-#     """
-
-
-#     try:
-#         track_manager.add_track(artist=request.form['artist'],
-#                                 album=request.form['album'],
-#                                 title=request.form['title'])
-#         logger.info("New song added: %s by %s", request.form['title'],
-#                     request.form['artist'])
-#         return redirect(url_for('index'))
-#     except sqlite3.OperationalError as err_oe:
-#         logger.error(
-#             "Error page returned. Not able to add song to local sqlite "
-#             "database: %s. Error: %s ",
-#             app.config['SQLALCHEMY_DATABASE_URI'], err_oe)
-#         return render_template('error.html')
-#     except sqlalchemy.exc.OperationalError as err_oe:
-#         logger.error(
-#             "Error page returned. Not able to add song to MySQL database: %s. "
-#             "Error: %s ",
-#             app.config['SQLALCHEMY_DATABASE_URI'], err_oe)
-#         return render_template('error.html')
 if __name__ == '__main__':
     app.run(
         debug=app.config["DEBUG"],
