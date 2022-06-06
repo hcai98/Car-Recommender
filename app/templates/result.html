@@ -6,78 +6,87 @@
   </head>
 
   <body>
-    <h2>Your dream car was:</h2>
-    <table>
-      <thead>
-        <tr>
-          <th>Maker</th>
-          <th>Model</th>
-          <th>Year</th>
-          <th>Body Type</th>
-          <th>Gearbox</th>
-          <th>Engine Size</th>
-          <th>Fuel Type</th>
-          <th>Seat Number</th>
-          <th>Door Number</th>
-          <th>Price Estimate</th>
-        </tr>
-      </thead>
+    <div class="results">
+      <div class="header2">
+        <h2>Your Impossible Dream Car</h2>
+      </div>
+      <table>
+        <thead>
+          <tr>
+            <th>Maker</th>
+            <th>Model</th>
+            <th>Year</th>
+            <th>Body Type</th>
+            <th>Gearbox</th>
+            <th>Engine Size</th>
+            <th>Fuel Type</th>
+            <th>Seat Number</th>
+            <th>Door Number</th>
+            <th>Price Estimate</th>
+          </tr>
+        </thead>
 
-      <tbody>
-        <tr>
-          <td>{{ dream_car.maker }}</td>
-          <td>{{ dream_car.genmodel }}</td>
-          <td>{{ dream_car.year }}</td>
-          <td>{{ dream_car.bodytype }}</td>
-          <td>{{ dream_car.gearbox }}</td>
-          <td>{{ dream_car.engin_size }}</td>
-          <td>{{ dream_car.fuel_type }}</td>
-          <td>{{ dream_car.seat_num }}</td>
-          <td>{{ dream_car.door_num }}</td>
-          <td>{{ dream_car.price }}</td>
-        </tr>
-      </tbody>
-    </table>
+        <tbody>
+          <tr>
+            <td>{{ dream_car.maker }}</td>
+            <td>{{ dream_car.genmodel }}</td>
+            <td>{{ dream_car.year }}</td>
+            <td>{{ dream_car.bodytype }}</td>
+            <td>{{ dream_car.gearbox }}</td>
+            <td>{{ dream_car.engin_size }}</td>
+            <td>{{ dream_car.fuel_type }}</td>
+            <td>{{ dream_car.seat_num }}</td>
+            <td>{{ dream_car.door_num }}</td>
+            <td>{{ dream_car.price }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
 
-    <hr />
+    <div class="results">
+      <div class="header3">
+        <h2>Maybe These Would Work?</h2>
+      </div>
+      <table>
+        <thead>
+          <tr>
+            <th>Maker</th>
+            <th>Model</th>
+            <th>Year</th>
+            <th>Body Type</th>
+            <th>Gearbox</th>
+            <th>Engine Size</th>
+            <th>Fuel Type</th>
+            <th>Seat Number</th>
+            <th>Door Number</th>
+            <th>Price Estimate</th>
+          </tr>
+        </thead>
 
-    <h2>Here are some alternatives we have found for you:</h2>
-    <table>
-      <thead>
-        <tr>
-          <th>Maker</th>
-          <th>Model</th>
-          <th>Year</th>
-          <th>Body Type</th>
-          <th>Gearbox</th>
-          <th>Engine Size</th>
-          <th>Fuel Type</th>
-          <th>Seat Number</th>
-          <th>Door Number</th>
-          <th>Price Estimate</th>
-        </tr>
-      </thead>
+        <tbody>
+          {% for car in cars %}
+          <tr>
+            <td>{{ car.maker }}</td>
+            <td>{{ car.genmodel }}</td>
+            <td>{{ car.year }}</td>
+            <td>{{ car.bodytype }}</td>
+            <td>{{ car.gearbox }}</td>
+            <td>{{ car.engin_size }}</td>
+            <td>{{ car.fuel_type }}</td>
+            <td>{{ car.seat_num }}</td>
+            <td>{{ car.door_num }}</td>
+            <td>{{ car.price }}</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
 
-      <tbody>
-        {% for car in cars %}
-        <tr>
-          <td>{{ car.maker }}</td>
-          <td>{{ car.genmodel }}</td>
-          <td>{{ car.year }}</td>
-          <td>{{ car.bodytype }}</td>
-          <td>{{ car.gearbox }}</td>
-          <td>{{ car.engin_size }}</td>
-          <td>{{ car.fuel_type }}</td>
-          <td>{{ car.seat_num }}</td>
-          <td>{{ car.door_num }}</td>
-          <td>{{ car.price }}</td>
-        </tr>
-        {% endfor %}
-      </tbody>
-    </table>
-
-    <h3>
-      <a href="{{ url_for('index') }}">Go Back</a>
-    </h3>
+    <div>
+      <h3>
+        <a href="{{ url_for('index') }}">Go Back</a>
+      </h3>
+    </div>
+   
   </body>
 </html>
