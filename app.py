@@ -58,7 +58,10 @@ def index():
 
         # get a list of all makers in the data base
         maker_list = [(makers[0], makers[0]) for makers in (car_manager.session
-                                                            .query(Cars.maker).distinct().all())]
+                                                            .query(Cars.maker)
+                                                            .distinct()
+                                                            .order_by(Cars.maker)
+                                                            .all())]
         logger.debug('Retrieved maker list: %s', maker_list)
 
         # set maker choices in form
@@ -91,10 +94,6 @@ def index():
             "Error page returned. Not able to query MySQL database: %s. "
             "Error: %s ",
             app.config['SQLALCHEMY_DATABASE_URI'], err_or)
-        return render_template('error.html')
-    except:
-        traceback.print_exc()
-        logger.error("Not able to display cars, error page returned")
         return render_template('error.html')
 
 
@@ -158,6 +157,7 @@ def get_models(maker: str):
                                                     .query(Cars.genmodel)
                                                     .filter(Cars.maker == maker)
                                                     .distinct()
+                                                    .order_by(Cars.genmodel)
                                                     .all())]
         logger.info('Get model list: %s', models)
 
@@ -197,6 +197,7 @@ def get_years(maker: str, model: str):
                                                 .filter(Cars.maker == maker,
                                                         Cars.genmodel == model)
                                                 .distinct()
+                                                .order_by(Cars.year)
                                                 .all())]
         logger.info('Get year list: %s', years)
 
@@ -239,6 +240,7 @@ def get_body_types(maker: str, model: str, year: str):
                                                                         Cars.genmodel == model,
                                                                         Cars.year == year)
                                                                 .distinct()
+                                                                .order_by(Cars.bodytype)
                                                                 .all())]
         logger.info('Get body type list: %s', bodytypes)
 

@@ -52,7 +52,8 @@ def get_recommendation(car_manager: CarManager,
     Returns:
         _type_: _description_
     """
-    logger.debug("Recommending by: %s, %s, %s, %s", maker, model, year, bodytype)
+    logger.debug("Recommending by: %s, %s, %s, %s",
+                 maker, model, year, bodytype)
 
     # get full specification of the input cars for display
     dream_car = (
@@ -64,7 +65,7 @@ def get_recommendation(car_manager: CarManager,
                 Cars.bodytype == bodytype)
         .all()
     )[0]
-    
+
     # retrieve cluster from saved prediction data
     cluster = dream_car.cluster
 
@@ -72,7 +73,8 @@ def get_recommendation(car_manager: CarManager,
     car_recommend = (
         car_manager.session
         .query(Cars)
-        .filter(Cars.cluster == cluster)
+        .filter(Cars.cluster == cluster, Cars.genmodel != model)
+        .order_by(Cars.maker, Cars.genmodel, Cars.year)
         .limit(max_rows)
         .all()
     )

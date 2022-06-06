@@ -91,5 +91,12 @@ python run_db.py ingest --input data/processed/labels.csv \
 ## Running the app
 
 ```shell
- docker run -e SQLALCHEMY_DATABASE_URI --mount type=bind,source="$(pwd)"/data,target=/app/data -p 5000:5000 final-project-app  
+docker run -e SQLALCHEMY_DATABASE_URI --mount type=bind,source="$(pwd)"/data,target=/app/data -p 5000:5000 final-project-app  
+```
+
+
+## Deployment on AWS
+
+```shell
+docker build -f dockerfiles/Dockerfile.app -t msia423-flask .
 ```
