@@ -98,7 +98,7 @@ evaluate: data/evaluation/evaluation_results.csv
 
 ## entire model pipeline
 all: label evaluate
-pipeline: label evaluate
+model-pipeline: label evaluate
 
 .PHONY: raw-to-s3 acquire-from-s3 cleaned features trained_model label evaluate all pipeline
 
@@ -119,11 +119,18 @@ ingest: create-db data/processed/labels.csv
 	ingest \
 	--input data/processed/labels.csv
 
+app-data: create-db ingest
+
+.PHONY: create-db ingest app-data
+
 # web app
 webapp:
 	docker run --mount type=bind,source="$(shell pwd)"/data,target=/app/data -p 5000:5000 \
 	-e SQLALCHEMY_DATABASE_URI \
 	final-project-app  
+
+.PHONY: webapp
+
 
 # clean up
 clean-processed:
@@ -138,5 +145,7 @@ clean-db:
 
 clean: clean-raw clean-processed clean-db
 
+clean-model:
+	rm -f models/*
 
 .PHONY: clean clean-raw
