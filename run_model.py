@@ -5,7 +5,7 @@ import pandas as pd
 import yaml
 
 from config import modelconfig
-from src.modeling import acquire, clean, featurize, train, label
+from src.modeling import acquire, clean, featurize, train, label, evaluate
 from src.utils import io
 
 # configure logger
@@ -39,7 +39,7 @@ if __name__ == '__main__':
     logger.info('Configuration file loaded from %s', args.config)   
 
     # input data
-    if (args.input is not None) and (args.step != 'label'):
+    if (args.input is not None) and (args.step not in ['label', 'evaluate']):
         df_input = io.read_pandas(args.input)
         logger.info('Input data loaded from %s', args.input)
 
@@ -63,12 +63,13 @@ if __name__ == '__main__':
         # in the config file.
         df_output = label.label(model_save_path=args.input, **config['label'])
     elif args.step == 'evaluate':
-        pass
-    #     # User should specify pyath to ground truth and prediction in config file
-    #     evaluate.evaluate(args.output, **config['evaluate'])
+        # User should specify path to the model in command line. Feature path and
+        # evaluation metrics should be specified in config file.
+        df_output = evaluate.evaluate(model_path=args.input, **config['evaluate'])
+
 
     # Save results of the previous processing step
     # however, if step is "acquire" or "train", we don't save data here
     # as it is handled within the acquire.acquire function.
-    if (args.output is not None) and (args.step not in ('acquire', 'train', 'evaluate')):
+    if (args.output is not None) and (args.step not in ('acquire', 'train')):
         io.write_pandas_to_csv(df_output, args.output)

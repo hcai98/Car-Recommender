@@ -147,6 +147,7 @@ def get_recommendations():
             app.config['SQLALCHEMY_DATABASE_URI'], err_or)
         return render_template('error.html')
 
+
 @app.route('/models/<maker>')
 def get_models(maker: str):
 
@@ -154,11 +155,11 @@ def get_models(maker: str):
         # retrieve all models built by the maker
         logger.debug("Getting all models for maker %s", maker)
         models = [(model[0], model[0]) for model in (car_manager.session
-                                                    .query(Cars.genmodel)
-                                                    .filter(Cars.maker == maker)
-                                                    .distinct()
-                                                    .order_by(Cars.genmodel)
-                                                    .all())]
+                                                     .query(Cars.genmodel)
+                                                     .filter(Cars.maker == maker)
+                                                     .distinct()
+                                                     .order_by(Cars.genmodel)
+                                                     .all())]
         logger.info('Get model list: %s', models)
 
         # create model objects and save in a lists
@@ -185,20 +186,21 @@ def get_models(maker: str):
             app.config['SQLALCHEMY_DATABASE_URI'], err_or)
         return render_template('error.html')
 
+
 @app.route('/years/<maker>/<model>')
 def get_years(maker: str, model: str):
 
     try:
         # retrieve all years of this model
         logger.debug("Getting all years for maker %s model %s",
-                    maker, model)
+                     maker, model)
         years = [(year[0], year[0]) for year in (car_manager.session
-                                                .query(Cars.year)
-                                                .filter(Cars.maker == maker,
-                                                        Cars.genmodel == model)
-                                                .distinct()
-                                                .order_by(Cars.year)
-                                                .all())]
+                                                 .query(Cars.year)
+                                                 .filter(Cars.maker == maker,
+                                                         Cars.genmodel == model)
+                                                 .distinct()
+                                                 .order_by(Cars.year)
+                                                 .all())]
         logger.info('Get year list: %s', years)
 
         # create model objects and save in a lists
@@ -232,16 +234,16 @@ def get_body_types(maker: str, model: str, year: str):
     # retrieve all body types of this model
     logger.debug("Getting all body types for %s %s %s",
                  maker, model, year)
-    
+
     try:
         bodytypes = [(bodytype[0], bodytype[0]) for bodytype in (car_manager.session
-                                                                .query(Cars.bodytype)
-                                                                .filter(Cars.maker == maker,
-                                                                        Cars.genmodel == model,
-                                                                        Cars.year == year)
-                                                                .distinct()
-                                                                .order_by(Cars.bodytype)
-                                                                .all())]
+                                                                 .query(Cars.bodytype)
+                                                                 .filter(Cars.maker == maker,
+                                                                         Cars.genmodel == model,
+                                                                         Cars.year == year)
+                                                                 .distinct()
+                                                                 .order_by(Cars.bodytype)
+                                                                 .all())]
         logger.info('Get body type list: %s', bodytypes)
 
         # create model objects and save in a lists
@@ -267,6 +269,7 @@ def get_body_types(maker: str, model: str, year: str):
             "Error: %s ",
             app.config['SQLALCHEMY_DATABASE_URI'], err_or)
         return render_template('error.html')
+
 
 if __name__ == '__main__':
     app.run(
