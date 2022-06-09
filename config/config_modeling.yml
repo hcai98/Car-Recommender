@@ -39,4 +39,6 @@ label:
   clean_data_path: data/processed/clean_cars.csv
   col_cluster: cluster
 evaluate:
-  metrics: TBD
+  feature_path: data/processed/feature.csv
+  metrics:
+    - silhouette

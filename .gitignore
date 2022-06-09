@@ -13,6 +13,8 @@ data/*
 data/processed/*
 !data/evaluation/
 data/evaluation/*
+!data/raw/
+data/raw/*
 !data/sample/
 !data/external/
 config/local/*

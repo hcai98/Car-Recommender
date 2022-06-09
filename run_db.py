@@ -3,6 +3,7 @@ import logging.config
 
 from src.database.create_db import create_db
 from src.database.add_cars import add_car_df
+from config.flaskconfig import SQLALCHEMY_DATABASE_URI
 from config import dbconfig
 
 # configure logger
@@ -19,13 +20,13 @@ if __name__ == "__main__":
     # Sub-parser for creating a database
     sp_create = subparsers.add_parser("create_db",
                                       description="Create database")
-    sp_create.add_argument("--engine_string",
+    sp_create.add_argument("--engine_string", default=SQLALCHEMY_DATABASE_URI,
                            help="SQLAlchemy connection URI for database")
 
     # Sub-parser for ingesting new data
     sp_ingest = subparsers.add_parser("ingest",
                                       description="Add data to database")
-    sp_ingest.add_argument("--engine_string",
+    sp_ingest.add_argument("--engine_string", default=SQLALCHEMY_DATABASE_URI,
                            help="SQLAlchemy connection URI for database")
     sp_ingest.add_argument("--input", default=None,
                            help="Path of the data frame to be added")

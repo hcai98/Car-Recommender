@@ -8,13 +8,23 @@ docker build -f dockerfiles/Dockerfile.app -t final-project-app .
 docker build -f dockerfiles/Dockerfile.test -t final-project-tests .
 ```
 
+## Data Acquisition
+```shell
+ python run_s3.py --s3path $S3_BUCKET/raw/Ad_table.csv --local_path data/external/Ad_table.csv
+
+ docker run -e AWS_ACCESS_KEY_ID -e AWS_SECRET_ACCESS_KEY --mount type=bind,source="$(pwd)",target=/app final-project run_s3.py --s3path ${S3_BUCKET}/raw/Ad_table.csv --local_path data/external/Ad_table.csv
+```
+
 
 ## Modeling
 
 
-### Archive Data
+### Acquire Data From S3
+
 ```Shell
-TBD
+python run_s3.py --download --s3path $S3_BUCKET/raw/Ad_table.csv --local_path data/raw/Ad_table.csv   
+
+docker run -e AWS_ACCESS_KEY_ID -e AWS_SECRET_ACCESS_KEY --mount type=bind,source="$(pwd)",target=/app final-project run_s3.py --download --s3path $S3_BUCKET/raw/Ad_table.csv --local_path data/raw/Ad_table.csv
 ```
 
 ### Clean Data
@@ -24,7 +34,6 @@ python run_model.py clean --input data/raw/Ad_table.csv --config config/config_m
 
 docker run --mount type=bind,source="$(pwd)",target=/app final-project run_model.py clean --input data/raw/Ad_table.csv --config config/config_modeling.yml --output data/processed/clean_cars.csv
 ```
-
 
 
 ### Featurize
@@ -46,6 +55,11 @@ docker run --mount type=bind,source="$(pwd)",target=/app final-project run_model
 python run_model.py label --input models/kmeans_50 --config config/config_modeling.yml --output data/processed/labels.csv
 
 docker run --mount type=bind,source="$(pwd)",target=/app final-project run_model.py label --input models/kmeans_50 --config config/config_modeling.yml --output data/processed/labels.csv
+```
+
+### Evaluate the model
+```shell
+python run_model.py evaluate --input models/kmeans_50 --config config/config_modeling.yml --output data/evaluation/evaluation_results.csv    
 ```
 
 ## Database
@@ -74,6 +88,12 @@ RDS
 python run_db.py create_db  \
     --engine_string mysql+pymysql://$MYSQL_USER:$MYSQL_PASSWORD@$MYSQL_HOST:$MYSQL_PORT/$DATABASE_NAME
 ```
+Any
+```shell
+docker run --mount type=bind,source="$(pwd)",target=/app -e SQLALCHEMY_DATABASE_URI final-project run_db.py create_db  
+```
+
+
 
 ### Ingestion
 
@@ -86,6 +106,11 @@ RDS
 ```shell
 python run_db.py ingest --input data/processed/labels.csv \
     --engine_string mysql+pymysql://$MYSQL_USER:$MYSQL_PASSWORD@$MYSQL_HOST:$MYSQL_PORT/$DATABASE_NAME     
+```
+
+Any
+```shell
+docker run --mount type=bind,source="$(pwd)",target=/app -e SQLALCHEMY_DATABASE_URI final-project run_db.py ingest --input data/processed/labels.csv
 ```
 
 ## Running the app
