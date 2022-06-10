@@ -3,7 +3,6 @@ import logging
 import sys
 
 import pandas as pd
-from sklearn.cluster import KMeans
 from sklearn.metrics import silhouette_score
 from src.utils.io import load_model, read_pandas
 
@@ -11,7 +10,9 @@ from src.utils.io import load_model, read_pandas
 logger = logging.getLogger(__name__)
 
 
-def evaluate(model_path: str, feature_path: str, metrics: List[str]) -> pd.DataFrame:
+def evaluate(model_path: str,
+             feature_path: str,
+             metrics: List[str]) -> pd.DataFrame:
     """Evaluate model performance using user specified metrics. Load model from
     model path. Load feature from feature path. Then calculate all evaluation metrics.
 
@@ -39,20 +40,19 @@ def evaluate(model_path: str, feature_path: str, metrics: List[str]) -> pd.DataF
     # check if metrics are specified.
     logger.debug('The following metrics will be computed: %s', metrics)
     if len(metrics) == 0:
-        logger.error('You must specify at least one evaluation metric. Program exiting...')
+        logger.error(
+            'You must specify at least one evaluation metric. Program exiting...')
         sys.exit(1)
 
     # get evaluation results for all metrics
     result_list = []
     if 'silhouette' in metrics:
         logger.info('Calculating silhouettes statistics.')
-        result_list.append(['silhouette', silhouette_score(feature, cluster_assignment)])
+        result_list.append(
+            ['silhouette', silhouette_score(feature, cluster_assignment)])
 
     # return all evaluation results
     df_result = pd.DataFrame(result_list, columns=['metric name', 'score'])
     logger.info('Evaluation wrapped into data frame.')
 
     return df_result
-
-
-

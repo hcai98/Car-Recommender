@@ -2,8 +2,6 @@ import logging
 from typing import List
 
 import pandas as pd
-import numpy as np
-import matplotlib.pyplot as plt
 from sklearn.preprocessing import StandardScaler
 
 logger = logging.getLogger(__name__)
@@ -18,7 +16,7 @@ def featurize(data: pd.DataFrame,
     Args:
         data (pd.DataFrame): Cleaned data.
         feature_cols (List[str]): Columns to be used as features.
-        is_get_dummies (bool): If true, convert categorical variables to 
+        is_get_dummies (bool): If true, convert categorical variables to
             dummies variables.
         is_standardize (bool): If true, standardize the data.
 

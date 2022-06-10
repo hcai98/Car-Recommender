@@ -14,20 +14,20 @@ def clean(data: pd.DataFrame,
           rename_map: dict,
           new_index: str) -> pd.DataFrame:
     """Clean the original data for modeling use. User can specify
-    the transformation, aggregation and renaming strategies and 
-    inform the function using the dictionaries. 
+    the transformation, aggregation and renaming strategies and
+    inform the function using the dictionaries.
 
 
     Args:
         data (pd.DataFrame): Raw data.
-        transformation (dict): Transformations strategy. The keys are 
-            the types of transformation. The values are lists of columns 
+        transformation (dict): Transformations strategy. The keys are
+            the types of transformation. The values are lists of columns
             to be transformed.
         aggregation (dict): Aggregation strategy. The keys are `key_cols`
-            (key columns), `key_path` (path the save the keys for later use), 
+            (key columns), `key_path` (path the save the keys for later use),
             and `agg_cols_transforms` (a dictionary specifying how to summarize
             different columns).
-        rename_map (dict): Keys are the columns to be renamed. Values are the new 
+        rename_map (dict): Keys are the columns to be renamed. Values are the new
             names.
         new_index (str): Name of the new index.
 
@@ -73,7 +73,7 @@ def transform_vars(data: pd.DataFrame,
     logger.debug('Stripping numerical data from string.')
     for var_strip_numeric in transformation['vars_strip_numeric']:
         data[var_strip_numeric] = (data[var_strip_numeric]
-                                   .str.replace('[^\d.]', '').astype(float))
+                                   .str.replace(r'[^\d.]', '').astype(float))
 
     # drop rows that doesn't have numeric value
     logger.debug('Dropping row that does not have numerical value.')
@@ -91,7 +91,7 @@ def aggregate_by_keys(data: pd.DataFrame,
                       aggregation: dict,
                       new_index: str) -> pd.DataFrame:
     """Aggregating the data by key columns and specified summary
-    methods. 
+    methods.
 
     Args:
         data (pd.DataFrame): Raw data.
@@ -137,8 +137,8 @@ def method_to_func(method_string: str) -> Union[Callable, str]:
     """
     if method_string == 'mean':
         return 'mean'
-    elif method_string == 'first':
+    if method_string == 'first':
         return 'first'
-    elif method_string == 'mode':
+    if method_string == 'mode':
         # return pd.Series.mode
         return lambda x: pd.Series.mode(x)[0]

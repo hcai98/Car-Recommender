@@ -5,7 +5,7 @@ import pandas as pd
 import yaml
 
 from config import modelconfig
-from src.modeling import acquire, clean, featurize, train, label, evaluate
+from src.modeling import clean, featurize, train, label, evaluate
 from src.utils import io
 
 # configure logger
@@ -32,7 +32,7 @@ if __name__ == '__main__':
     args = parser.parse_args()
 
     # what step are we performing using this script?
-    logger.info("Current Step: %s", args.step)
+    logger.info('Current Step: %s', args.step)
 
     # Load configuration file for parameters and tmo path
     config = io.read_yml(path=args.config)

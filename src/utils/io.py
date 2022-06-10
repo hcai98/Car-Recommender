@@ -10,7 +10,8 @@ import yaml
 logger = logging.getLogger(__name__)
 
 
-def read_pandas(input_path: str) -> Union[pd.DataFrame, pd.Series]:
+def read_pandas(input_path: str) -> Optional[Union[pd.DataFrame,
+                                                   pd.Series]]:
     """Read csv to pandas data frame or series.
 
     Args:
@@ -22,7 +23,7 @@ def read_pandas(input_path: str) -> Union[pd.DataFrame, pd.Series]:
 
     if input_path is None:
         logger.warning("Input path is None. Nothing loaded")
-        return
+        return None
 
     logger.info("Reading csv from %s", input_path)
     try:
@@ -39,8 +40,9 @@ def read_pandas(input_path: str) -> Union[pd.DataFrame, pd.Series]:
         raise err_os
 
 
-def write_pandas_to_csv(df_output: Optional[Union[pd.DataFrame, pd.Series]],
-                        output_path: str):
+def write_pandas_to_csv(df_output: Optional[Union[pd.DataFrame,
+                                                  pd.Series]],
+                        output_path: str) -> None:
     """Save pandas data frame to output path.
 
     Args:
@@ -70,16 +72,16 @@ def read_yml(path: str) -> Union[Dict, List]:
         path (str): Path to the YAML file.
 
     Returns:
-        Union[Dict, List] 
+        Union[Dict, List]
     """
-    with open(path, 'r', encoding='utf-8') as file:
+    with open(path, "r", encoding="utf-8") as file:
         return_dict = yaml.load(file, Loader=yaml.FullLoader)
-        logger.info('YAML file loaded from %s', path)
+        logger.info("YAML file loaded from %s", path)
         return return_dict
 
 
 def save_model(model: sklearn.base.BaseEstimator,
-               output_dir: str):
+               output_dir: str) -> None:
     """Save an sklearn model to local directory.
 
     Args:
