@@ -14,23 +14,24 @@ Author: Haoyang (Bill) Cai
   - [Directory structure](#directory-structure)
   - [Envrionment Setup](#envrionment-setup)
     - [Environment Variables](#environment-variables)
-      - [AWS](#aws)
+      - [AWS Credential](#aws-credential)
+      - [S3 Bucket](#s3-bucket)
       - [Database](#database)
+    - [Docker Images](#docker-images)
+  - [Data Acquasition](#data-acquasition)
   - [Modeling Pipeline](#modeling-pipeline)
-    - [1. Initialize the database](#1-initialize-the-database)
-      - [Build the image](#build-the-image)
-      - [Create the database](#create-the-database)
-      - [Adding songs](#adding-songs)
-      - [Defining your engine string](#defining-your-engine-string)
-        - [Local SQLite database](#local-sqlite-database)
-    - [2. Configure Flask app](#2-configure-flask-app)
-    - [3. Run the Flask app](#3-run-the-flask-app)
-      - [Build the image](#build-the-image-1)
-      - [Running the app](#running-the-app)
+    - [1. Download Data From S3](#1-download-data-from-s3)
+    - [2. Data Cleaning](#2-data-cleaning)
+    - [3. Create training features](#3-create-training-features)
+    - [4. Train the model](#4-train-the-model)
+    - [5. Label the data](#5-label-the-data)
+    - [6. Model Evaluation](#6-model-evaluation)
+  - [Load Data Into Database](#load-data-into-database)
+    - [Create the database](#create-the-database)
+      - [Ingest Data Into Database](#ingest-data-into-database)
+  - [Running the app](#running-the-app)
       - [Kill the container](#kill-the-container)
   - [Testing](#testing)
-  - [Mypy](#mypy)
-  - [Pylint](#pylint)
 
 ## Project charter
 
@@ -44,7 +45,7 @@ Due to the ongoing semiconductor shortage, the post-pandemic automotive market c
 
 Users will first specify the *make* and *model* of their dream car. The app will then *sequentially output* cars similar to the given input based on an unsupervised clustering algorithm (users must click "interested" or "not interested" to go to the next recommendation). The recommender is built using a publicly available dataset called [DVM-CAR](https://deepvisualmarketing.github.io/).
 
-**Example:** A user who has initially been looking for a BMW 3-Series is looking for other options in the market. Based characteristics of the given car, the app would first output the most similar car (say Audi A4) along with its specs. The user would then click "interested" or "not interested" to go to the next recommended car. The process is repeated until the whole recommendation list is exhausted.
+**Example:** A user who has initially been looking for a BMW 3-Series is looking for other options in the market. Based on characteristics of the given car, the app would output a list of cars that are the most similar to the user's dream car.
 
 Based on the recommendations, users would be able to narrow down their search and utilize time more efficiently.
 
@@ -52,7 +53,7 @@ Based on the recommendations, users would be able to narrow down their search an
 
 #### Machine Learning Metrics
 
-The ideal clustering algorithm/architecture will be picked using evaluation metrics such as Pseudo F and Silhouette Statistics. To be deployed, the best model should achieve an ***R-Squared*** greater than or equal to 0.75. 
+The ideal clustering algorithm/architecture will be picked using Silhouette Statistics. To be deployed, the best model should achieve an ***Silhouette*** greater than or equal to 0.5.
 
 #### Business Metrics
 
@@ -110,11 +111,17 @@ The app is designed so that user must click "interested" or "not interested" to 
 
 ### Environment Variables
 
-#### AWS
+#### AWS Credential
 To set up the AWS credential, run the following commands with your own credential filled in. This is crucial for accessing the S3 bucket.
 ```shell
 export AWS_ACCESS_KEY_ID="YOUR_ACCESS_KEY_ID"
 export AWS_SECRET_ACCESS_KEY="YOUR_SECRET_ACCESS_KEY"
+```
+
+#### S3 Bucket
+You will also need to provide the name of your S3 bucket to perform the data acquisition step.
+```shell
+export S3_BUCKET="s3://YOUR_BUCKET_NAME"
 ```
 
 #### Database
@@ -124,184 +131,88 @@ with the URI of the SQL engine you desire.
 export SQLALCHEMY_DATABASE_URI = "YOUR_DATABASE_URI"
 ```
 
+### Docker Images
+You will need to build the following three docker images to run the modeling pipeline and web app.
+```shell
+make image-model
+make image-app
+make image-test
+```
+
+## Data Acquasition
+Run the following command to upload the source data to your S3 bucket. You may configure the path of the source file by changing the `SOURCEDATA_PATH` variable in the `Makefile`.
+
+```shell
+make raw-to-s3
+```
+
 ## Modeling Pipeline
 
-### 1. Initialize the database 
-#### Build the image 
+### 1. Download Data From S3
+To download the raw data from your S3 Bucket, run the following commands
+```shell
+make acquire-from-s3
+```
+### 2. Data Cleaning
+To clean the raw data, run 
+```shell
+make cleaned
+```
 
-To build the image, run from this directory (the root of the repo): 
+### 3. Create training features
+Once you obtained the cleaned data, run the following command to generate training features.
+```shell
+make features
+```
 
+### 4. Train the model
+This command allows you to cluster the data using KMeans based on the generated features. Cluster centroid will be saved to a specified directory.
+```shell
+make trained-model
+```
+
+### 5. Label the data
+Next we can use the cluster centroids to label the raw data. The labeled data set will be used by the app to generate recommendations.
+```shell
+make label
+```
+
+### 6. Model Evaluation
+We can also evaluate the model before deployment using user-defined metrics (can be configured in `config/config_modeling.yml`)
+```shell
+make evaluate
+```
+
+## Load Data Into Database
+
+### Create the database 
 ```bash
- docker build -f dockerfiles/Dockerfile.run -t pennylanedb .
-```
-#### Create the database 
-To create the database in the location configured in `config.py` run: 
-
-```bash
-docker run --mount type=bind,source="$(pwd)"/data,target=/app/data/ pennylanedb create_db  --engine_string=sqlite:///data/tracks.db
-```
-The `--mount` argument allows the app to access your local `data/` folder and save the SQLite database there so it is available after the Docker container finishes.
-
-
-#### Adding songs 
-To add songs to the database:
-
-```bash
-docker run --mount type=bind,source="$(pwd)"/data,target=/app/data/ pennylanedb ingest --engine_string=sqlite:///data/tracks.db --artist=Emancipator --title="Minor Cause" --album="Dusk to Dawn"
+make create-db
 ```
 
-#### Defining your engine string 
-A SQLAlchemy database connection is defined by a string with the following format:
-
-`dialect+driver://username:password@host:port/database`
-
-The `+dialect` is optional and if not provided, a default is used. For a more detailed description of what `dialect` and `driver` are and how a connection is made, you can see the documentation [here](https://docs.sqlalchemy.org/en/13/core/engines.html). We will cover SQLAlchemy and connection strings in the SQLAlchemy lab session on 
-##### Local SQLite database 
-
-A local SQLite database can be created for development and local testing. It does not require a username or password and replaces the host and port with the path to the database file: 
-
-```python
-engine_string='sqlite:///data/tracks.db'
-
+#### Ingest Data Into Database
+```shell
+make ingest
 ```
 
-The three `///` denote that it is a relative path to where the code is being run (which is from the root of this directory).
-
-You can also define the absolute path with four `////`, for example:
-
-```python
-engine_string = 'sqlite://///Users/cmawer/Repos/2022-msia423-template-repository/data/tracks.db'
+## Running the app
+Once the labeled data has been loaded in to the data set specified by `SQLALCHEMY_DATABASE_URI`, we can simply use the following make command to deploy the webapp.
+```shell
+make webapp
 ```
-
-
-### 2. Configure Flask app 
-
-`config/flaskconfig.py` holds the configurations for the Flask app. It includes the following configurations:
-
-```python
-DEBUG = True  # Keep True for debugging, change to False when moving to production 
-LOGGING_CONFIG = "config/logging/local.conf"  # Path to file that configures Python logger
-HOST = "0.0.0.0" # the host that is running the app. 0.0.0.0 when running locally 
-PORT = 5000  # What port to expose app on. Must be the same as the port exposed in dockerfiles/Dockerfile.app 
-SQLALCHEMY_DATABASE_URI = 'sqlite:///data/tracks.db'  # URI (engine string) for database that contains tracks
-APP_NAME = "penny-lane"
-SQLALCHEMY_TRACK_MODIFICATIONS = True 
-SQLALCHEMY_ECHO = False  # If true, SQL for queries made will be printed
-MAX_ROWS_SHOW = 100 # Limits the number of rows returned from the database 
-```
-
-### 3. Run the Flask app 
-
-#### Build the image 
-
-To build the image, run from this directory (the root of the repo): 
-
-```bash
- docker build -f dockerfiles/Dockerfile.app -t pennylaneapp .
-```
-
-This command builds the Docker image, with the tag `pennylaneapp`, based on the instructions in `dockerfiles/Dockerfile.app` and the files existing in this directory.
-
-#### Running the app
-
-To run the Flask app, run: 
-
-```bash
- docker run --name test-app --mount type=bind,source="$(pwd)"/data,target=/app/data/ -p 5000:5000 pennylaneapp
-```
-You should be able to access the app at http://127.0.0.1:5000/ in your browser (Mac/Linux should also be able to access the app at http://127.0.0.1:5000/ or localhost:5000/) .
-
-The arguments in the above command do the following: 
-
-* The `--name test-app` argument names the container "test". This name can be used to kill the container once finished with it.
-* The `--mount` argument allows the app to access your local `data/` folder so it can read from the SQLlite database created in the prior section. 
-* The `-p 5000:5000` argument maps your computer's local port 5000 to the Docker container's port 5000 so that you can view the app in your browser. If your port 5000 is already being used for someone, you can use `-p 5001:5000` (or another value in place of 5001) which maps the Docker container's port 5000 to your local port 5001.
-
-Note: If `PORT` in `config/flaskconfig.py` is changed, this port should be changed accordingly (as should the `EXPOSE 5000` line in `dockerfiles/Dockerfile.app`)
-
 
 #### Kill the container 
 
 Once finished with the app, you will need to kill the container. If you named the container, you can execute the following: 
 
 ```bash
-docker kill test-app 
+docker kill final-project-app
 ```
-where `test-app` is the name given in the `docker run` command.
-
-If you did not name the container, you can look up its name by running the following:
-
-```bash 
-docker container ls
-```
-
-The name will be provided in the right most column. 
 
 ## Testing
-
-Run the following:
-
-```bash
- docker build -f dockerfiles/Dockerfile.test -t pennylanetest .
-```
 
 To run the tests, run: 
 
 ```bash
- docker run pennylanetest
-```
-
-The following command will be executed within the container to run the provided unit tests under `test/`:  
-
-```bash
-python -m pytest
-```
-
-## Mypy
-
-Run the following:
-
-```bash
- docker build -f dockerfiles/Dockerfile.mypy -t pennymypy .
-```
-
-To run mypy over all files in the repo, run: 
-
-```bash
- docker run pennymypy .
-```
-To allow for quick iteration, mount your entire repo so changes in Python files are detected:
-
-
-```bash
- docker run --mount type=bind,source="$(pwd)"/,target=/app/ pennymypy .
-```
-
-To run mypy for a single file, run: 
-
-```bash
- docker run pennymypy run.py
-```
-
-## Pylint
-
-Run the following:
-
-```bash
- docker build -f dockerfiles/Dockerfile.pylint -t pennylint .
-```
-
-To run pylint for a file, run:
-
-```bash
- docker run pennylint run.py 
-```
-
-(or any other file name, with its path relative to where you are executing the command from)
-
-To allow for quick iteration, mount your entire repo so changes in Python files are detected:
-
-
-```bash
- docker run --mount type=bind,source="$(pwd)"/,target=/app/ pennylint run.py
+docker run final-project-tests
 ```
