@@ -7,7 +7,7 @@ from flask import Flask, jsonify, render_template, request, Response
 from werkzeug.exceptions import BadRequestKeyError
 
 # For setting up the Flask-SQLAlchemy database session
-from src.database.create_db import Cars # type: ignore
+from src.database.create_db import Cars  # type: ignore
 from src.database.add_cars import CarManager  # type: ignore
 from src.flaskapp.flask_models import Form  # type: ignore
 from src.flaskapp.recommend import validate_input, get_recommendation  # type: ignore

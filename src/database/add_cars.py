@@ -1,6 +1,3 @@
-"""Creates, ingests data into, and enables querying of a table of
- songs for the PennyLane app to query from and display results to the user."""
-# mypy: plugins = sqlmypy, plugins = flasksqlamypy
 import logging.config
 import sqlite3
 import typing
@@ -8,12 +5,11 @@ import typing
 import flask
 import sqlalchemy
 import sqlalchemy.orm
-from flask_sqlalchemy import SQLAlchemy
+from flask_sqlalchemy import SQLAlchemy  # type: ignore
 from sqlalchemy.ext.declarative import declarative_base
-import pandas as pd
 
-from src.utils import io
-from src.database.create_db import Cars
+from src.utils import io  # type: ignore
+from src.database.create_db import Cars  # type: ignore
 
 logger = logging.getLogger(__name__)
 
@@ -21,7 +17,7 @@ Base: typing.Any = declarative_base()
 
 
 class CarManager:
-    """Creates a SQLAlchemy connection to the tracks table.
+    """Creates a SQLAlchemy connection to the cars table.
 
     Args:
         app (:obj:`flask.app.Flask`): Flask app object for when connecting from
@@ -69,7 +65,7 @@ class CarManager:
         logger.info("Car data (with assignment) loaded.")
 
         # every element corresponds to a row in the data frame.
-        car_dict_list = cars.to_dict(orient='records')
+        car_dict_list = cars.to_dict(orient="records")
         logger.debug("Transformed df into list. Length: %s",
                      len(car_dict_list))
 
@@ -105,12 +101,12 @@ def add_car_df(input_path: str, engine_string: str) -> None:
 
     # create a car manager instance
     car_manager = CarManager(engine_string=engine_string)
-    logger.debug('Car manager created')
+    logger.debug("Car manager created")
 
     try:
         # use manager to add data to data base
         car_manager.add_car_df(input_path)
-        logger.info('Data frame added to database.')
+        logger.info("Data frame added to database.")
     except sqlite3.OperationalError as err_oe:
         logger.error(
             "Error page returned. Not able to add song to local sqlite "

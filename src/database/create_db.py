@@ -1,10 +1,7 @@
 import logging
-from operator import index
-import os
-import typing
 
-from sqlalchemy import Column, Integer, String, Float, ForeignKey, create_engine
-from sqlalchemy.orm import sessionmaker, relationship, declarative_base
+from sqlalchemy import Column, Integer, String, Float, create_engine
+from sqlalchemy.orm import declarative_base
 
 logger = logging.getLogger(__name__)
 
@@ -14,7 +11,7 @@ class Cars(Base):
     """Cars table: more than 0.25 million us. Contains general info about the cars and their cluster
     assignments.
     """
-    __tablename__ = "cars"
+    __tablename__ = 'cars'
 
     car_id = Column(String(100), primary_key=True)
     genmodel_id = Column(String(100))
@@ -34,18 +31,15 @@ class Cars(Base):
         return f'Maker:{self.maker}, Model:{self.genmodel}, Year:{self.year}, Cluster:{self.cluster}.'
 
 
-def create_db(engine_string: str):
+def create_db(engine_string: str) -> None:
     """Connect to an SQL engine through engine string and create
     a data base.
 
     Args:
-        engine_string (str): _description_
+        engine_string (str): The SQL Engine Path.
     """
     # Set up sqlite connection
     engine = create_engine(engine_string)
-
-    # Create a db session
-    # Session = sessionmaker(bind=engine)
 
     # Create the tracks table
     Base.metadata.create_all(engine)
