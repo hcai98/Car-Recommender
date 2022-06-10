@@ -58,17 +58,18 @@ The app is designed so that user must click "interested" or "not interested" to 
 
 ```
 ├── README.md                         <- You are here
-├── api
-│   ├── static/                       <- CSS, JS files that remain static
-│   ├── templates/                    <- HTML (or other code) that is templated and changes based on a set of inputs│    
-│
 ├── config                            <- Directory for configuration files 
 │   ├── local/                        <- Directory for keeping environment variables and other local configurations that *do not sync** to Github 
 │   ├── logging/                      <- Configuration of python loggers
+│   ├── dbconfig.py                   <- Configurations for run_db.py 
 │   ├── flaskconfig.py                <- Configurations for Flask API 
+│   ├── modelconfig.py                <- Configurations for run_model.py
 │
-├── data                              <- Folder that contains data used or generated. Only the external/ and sample/ subdirectories are tracked by git. 
+├── data                              <- Folder that contains data used or generated.
+│   ├── evaluation/                   <- Model evaluation results
 │   ├── external/                     <- External data sources, usually reference data,  will be synced with git
+│   ├── processed/                    <- The processed data resulting from the modeling pipeline 
+│   ├── raw/                          <- The raw data downloaded from the S3 bucket
 │   ├── sample/                       <- Sample data used for code development and testing, will be synced with git
 │
 ├── deliverables/                     <- Any white papers, presentations, final work products that are presented or delivered to a stakeholder 
@@ -76,8 +77,8 @@ The app is designed so that user must click "interested" or "not interested" to 
 ├── docs/                             <- Sphinx documentation based on Python docstrings. Optional for this project.
 |
 ├── dockerfiles/                      <- Directory for all project-related Dockerfiles 
+│   ├── Dockerfile                    <- Dockerfile for building image to run modeling pipeline
 │   ├── Dockerfile.app                <- Dockerfile for building image to run web app
-│   ├── Dockerfile.run                <- Dockerfile for building image to execute run.py  
 │   ├── Dockerfile.test               <- Dockerfile for building image to run unit tests
 │
 ├── figures/                          <- Generated graphics and figures to be used in reporting, documentation, etc
@@ -94,7 +95,7 @@ The app is designed so that user must click "interested" or "not interested" to 
 │
 ├── src/                              <- Source data for the project. No executable Python files should live in this folder.  
 │
-├── test/                             <- Files necessary for running model tests (see documentation below) 
+├── tests/                             <- Files necessary for running model tests (see documentation below) 
 │
 ├── app.py                            <- Flask wrapper for running the web app 
 ├── run.py                            <- Simplifies the execution of one or more of the src scripts  
