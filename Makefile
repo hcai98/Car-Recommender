@@ -12,6 +12,8 @@ image-test:
 
 .PHONY: image-model image-app image-test
 
+
+
 # data acquisition
 raw-to-s3: ${SOURCEDATA_PATH}
 	docker run --mount type=bind,source="$(shell pwd)",target=/app \
@@ -21,6 +23,7 @@ raw-to-s3: ${SOURCEDATA_PATH}
 		run_s3.py \
 		--s3path ${S3_BUCKET}/raw/Ad_table.csv \
 		--local_path ${SOURCEDATA_PATH}
+
 
 
 # modeling pipeline
@@ -103,6 +106,7 @@ model-pipeline: label evaluate
 .PHONY: raw-to-s3 acquire-from-s3 cleaned features trained_model label evaluate all pipeline
 
 
+
 # database
 create-db:
 	docker run --mount type=bind,source="$(shell pwd)",target=/app \
@@ -123,6 +127,8 @@ app-data: create-db ingest
 
 .PHONY: create-db ingest app-data
 
+
+
 # web app
 webapp:
 	docker run --mount type=bind,source="$(shell pwd)"/data,target=/app/data -p 5000:5000 \
@@ -130,6 +136,7 @@ webapp:
 	final-project-app  
 
 .PHONY: webapp
+
 
 
 # clean up
