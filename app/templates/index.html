@@ -1,43 +1,101 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <link href="static/basic.css" rel="stylesheet">
-</head>
+  <head>
+    <meta charset="UTF-8" />
+    <link href="static/basic.css" rel="stylesheet" />
+  </head>
 
-<body>
-    <h3>
-         <a href = "{{ url_for('index') }}">Penny Lane Music Recommender</a>
-    </h3>
+  <body>
+    <div class="header">
+      <h1>
+        <p >ALT - A Car Recommender System</p>
+      </h1>
+    </div>
 
-    <hr/>
-    <table>
-         <thead>
-            <tr>
-               <th>Title</th>
-               <th>Artist</th>
-               <th>Album</th>
-            </tr>
-         </thead>
+    <hr />
 
-         <tbody>
-            {% for track in tracks %}
-               <tr>
-                   <td>{{ track.title }}</td>
-                   <td>{{ track.artist }}</td>
-                   <td>{{ track.album }}</td>
-               </tr>
-            {% endfor %}
-         </tbody>
-      </table>
-      <form action="{{ url_for('add_entry') }}" method=post class=add-entry>
-      <dl>
-        <input type=text size=15 name=title placeholder="Title">
-        <input type=text size=15 name=artist placeholder="Artist">
-        <input type=text size=15 name=album placeholder="Album">
-        <input type=submit value=Add>
-      </dl>
+    <!-- This form captures the user input -->
+    <h2>
+      <p>Tell us what your favorite car is:</p>
+    </h2>
+    <form action="{{ url_for('get_recommendations') }}" method="post">
+      {{ form_user_input.csrf_token }} {{ form_user_input.maker }} {{
+      form_user_input.model }} {{ form_user_input.year }} {{
+      form_user_input.bodytype }}
+      <input type="submit" value="Get Recommendations" />
     </form>
 
-</body>
+    <hr />
+
+    <!-- Java scripts to control the dropdown menus -->
+    <script>
+      let maker_select = document.getElementById("maker");
+      let model_select = document.getElementById("model");
+      let year_select = document.getElementById("year");
+      let body_select = document.getElementById("bodytype");
+
+      //  Change other dropdown lists when new maker is selected
+      maker_select.onchange = function () {
+        maker = maker_select.value;
+
+        fetch("/models/" + maker).then(function (response) {
+          response.json().then(function (data) {
+            let optionHTML = '<option value="">Enter Model</option>';
+
+            for (let model of data.models) {
+              optionHTML +=
+                '<option value="' + model.id + '">' + model.name + "</option>";
+            }
+
+            model_select.innerHTML = optionHTML;
+            year_select.innerHTML = '<option value="">Enter Year</option>';
+            body_select.innerHTML = '<option value="">Enter Body Type</option>';
+          });
+        });
+      };
+
+      //  Change other dropdown lists when new model is selected
+      model_select.onchange = function () {
+        model = model_select.value;
+
+        fetch("/years/" + maker + "/" + model).then(function (response) {
+          response.json().then(function (data) {
+            let optionHTML = '<option value="">Enter Year</option>';
+
+            for (let year of data.years) {
+              optionHTML +=
+                '<option value="' + year.id + '">' + year.name + "</option>";
+            }
+
+            year_select.innerHTML = optionHTML;
+            body_select.innerHTML = '<option value="">Enter Body Type</option>';
+          });
+        });
+      };
+
+      //  Change other dropdown lists when new year is selected
+      year_select.onchange = function () {
+        year = year_select.value;
+
+        fetch("/bodytypes/" + maker + "/" + model + "/" + year).then(function (
+          response
+        ) {
+          response.json().then(function (data) {
+            let optionHTML = '<option value="">Enter Body Type</option>';
+
+            for (let bodytype of data.bodytypes) {
+              optionHTML +=
+                '<option value="' +
+                bodytype.id +
+                '">' +
+                bodytype.name +
+                "</option>";
+            }
+
+            body_select.innerHTML = optionHTML;
+          });
+        });
+      };
+    </script>
+  </body>
 </html>

@@ -3,18 +3,30 @@
 Author: Haoyang (Bill) Cai
 
 ## Table of Contents
-* [Project Charter ](#Project-charter)
-  * [Vision](#Vision)
-  * [Mission](#Mission)
-  * [Success criteria](#Success-criteria)
-* [Directory structure ](#Directory-structure)
-* [Running the app ](#Running-the-app)
-  * [1. Initialize the database ](#1.-Initialize-the-database)
-  * [2. Configure Flask app ](#2.-Configure-Flask-app)
-  * [3. Run the Flask app ](#3.-Run-the-Flask-app)
-* [Testing](#Testing)
-* [Mypy](#Mypy)
-* [Pylint](#Pylint)
+- [MSiA423: ALT - An Automobile Recommender](#msia423-alt---an-automobile-recommender)
+  - [Table of Contents](#table-of-contents)
+  - [Project charter](#project-charter)
+    - [Vision](#vision)
+    - [Mission](#mission)
+    - [Success criteria](#success-criteria)
+      - [Machine Learning Metrics](#machine-learning-metrics)
+      - [Business Metrics](#business-metrics)
+  - [Directory structure](#directory-structure)
+  - [Running the app](#running-the-app)
+    - [1. Initialize the database](#1-initialize-the-database)
+      - [Build the image](#build-the-image)
+      - [Create the database](#create-the-database)
+      - [Adding songs](#adding-songs)
+      - [Defining your engine string](#defining-your-engine-string)
+        - [Local SQLite database](#local-sqlite-database)
+    - [2. Configure Flask app](#2-configure-flask-app)
+    - [3. Run the Flask app](#3-run-the-flask-app)
+      - [Build the image](#build-the-image-1)
+      - [Running the app](#running-the-app-1)
+      - [Kill the container](#kill-the-container)
+  - [Testing](#testing)
+  - [Mypy](#mypy)
+  - [Pylint](#pylint)
 
 ## Project charter
 
@@ -28,7 +40,7 @@ Due to the ongoing semiconductor shortage, the post-pandemic automotive market c
 
 Users will first specify the *make* and *model* of their dream car. The app will then *sequentially output* cars similar to the given input based on an unsupervised clustering algorithm (users must click "interested" or "not interested" to go to the next recommendation). The recommender is built using a publicly available dataset called [DVM-CAR](https://deepvisualmarketing.github.io/).
 
-**Example:** A user who has initially been looking for a BMW 3-Series is looking for other options in the market. Based characteristics of the given car, the app would first output the most similar car (say Audi A4) along with its specs and images. The user would then click "interested" or "not interested" to go to the next recommended car. The process is repeated until the whole recommendation list is exhausted.
+**Example:** A user who has initially been looking for a BMW 3-Series is looking for other options in the market. Based characteristics of the given car, the app would first output the most similar car (say Audi A4) along with its specs. The user would then click "interested" or "not interested" to go to the next recommended car. The process is repeated until the whole recommendation list is exhausted.
 
 Based on the recommendations, users would be able to narrow down their search and utilize time more efficiently.
 
