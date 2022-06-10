@@ -12,7 +12,11 @@ Author: Haoyang (Bill) Cai
       - [Machine Learning Metrics](#machine-learning-metrics)
       - [Business Metrics](#business-metrics)
   - [Directory structure](#directory-structure)
-  - [Running the app](#running-the-app)
+  - [Envrionment Setup](#envrionment-setup)
+    - [Environment Variables](#environment-variables)
+      - [AWS](#aws)
+      - [Database](#database)
+  - [Modeling Pipeline](#modeling-pipeline)
     - [1. Initialize the database](#1-initialize-the-database)
       - [Build the image](#build-the-image)
       - [Create the database](#create-the-database)
@@ -22,7 +26,7 @@ Author: Haoyang (Bill) Cai
     - [2. Configure Flask app](#2-configure-flask-app)
     - [3. Run the Flask app](#3-run-the-flask-app)
       - [Build the image](#build-the-image-1)
-      - [Running the app](#running-the-app-1)
+      - [Running the app](#running-the-app)
       - [Kill the container](#kill-the-container)
   - [Testing](#testing)
   - [Mypy](#mypy)
@@ -102,7 +106,25 @@ The app is designed so that user must click "interested" or "not interested" to 
 ├── requirements.txt                  <- Python package dependencies 
 ```
 
-## Running the app 
+## Envrionment Setup
+
+### Environment Variables
+
+#### AWS
+To set up the AWS credential, run the following commands with your own credential filled in. This is crucial for accessing the S3 bucket.
+```shell
+export AWS_ACCESS_KEY_ID="YOUR_ACCESS_KEY_ID"
+export AWS_SECRET_ACCESS_KEY="YOUR_SECRET_ACCESS_KEY"
+```
+
+#### Database
+The app's functioning depends on real-time access to a SQL data base. Run the following commands
+with the URI of the SQL engine you desire.
+```shell
+export SQLALCHEMY_DATABASE_URI = "YOUR_DATABASE_URI"
+```
+
+## Modeling Pipeline
 
 ### 1. Initialize the database 
 #### Build the image 
