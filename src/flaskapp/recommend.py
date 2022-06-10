@@ -1,7 +1,10 @@
 import logging
+from typing import Tuple, List
 
-from src.database.create_db import Cars
-from src.database.add_cars import CarManager
+from sqlalchemy.orm import Query
+
+from src.database.create_db import Cars  # type: ignore
+from src.database.add_cars import CarManager  # type: ignore
 
 logger = logging.getLogger(__name__)
 
@@ -21,15 +24,15 @@ def validate_input(maker: str,
     Raises:
         ValueError: Some value missing.
     """
-    logger.debug("Validating: %s, %s, %s, %s", maker, model, year, bodytype)
+    logger.debug('Validating: %s, %s, %s, %s', maker, model, year, bodytype)
 
     if maker == '':
         raise ValueError('Maker missing.')
-    elif model == '':
+    if model == '':
         raise ValueError('Model missing.')
-    elif year == '':
+    if year == '':
         raise ValueError('Year missing.')
-    elif bodytype == '':
+    if bodytype == '':
         raise ValueError('Body type missing.')
 
 
@@ -38,7 +41,7 @@ def get_recommendation(car_manager: CarManager,
                        model: str,
                        year: int,
                        bodytype: str,
-                       max_rows: int):
+                       max_rows: int) -> Tuple[Query, List[Query]]:
     """Recommend cars from the same cluster as the input.
 
     Args:
@@ -50,9 +53,10 @@ def get_recommendation(car_manager: CarManager,
         max_rows (int): Maximum number of recommendations to be displayed.
 
     Returns:
-        _type_: _description_
+        Query: The dream car row.
+        List[Query]: The recommended cars.
     """
-    logger.debug("Recommending by: %s, %s, %s, %s",
+    logger.debug('Recommending by: %s, %s, %s, %s',
                  maker, model, year, bodytype)
 
     # get full specification of the input cars for display
