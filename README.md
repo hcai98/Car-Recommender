@@ -1,4 +1,4 @@
-# MSiA423: ALT - An Automobile Recommender
+# ALT - An Automobile Recommender
 
 Author: Haoyang (Bill) Cai
 
