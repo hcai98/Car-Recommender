@@ -3,7 +3,7 @@
 Author: Haoyang (Bill) Cai
 
 ## Table of Contents
-- [MSiA423: ALT - An Automobile Recommender](#msia423-alt---an-automobile-recommender)
+- [ALT - An Automobile Recommender](#msia423-alt---an-automobile-recommender)
   - [Table of Contents](#table-of-contents)
   - [Project charter](#project-charter)
     - [Vision](#vision)
